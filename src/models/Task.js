@@ -26,7 +26,6 @@ const Task = sequelize.define("Task", {
     allowNull: true
   },
 
-  // 🔹 REQUIRED FOREIGN KEYS
   trainerId: {
     type: DataTypes.INTEGER,
     allowNull: false

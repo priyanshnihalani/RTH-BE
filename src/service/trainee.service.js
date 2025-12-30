@@ -129,7 +129,7 @@ class TraineeService {
 
       registrationId: u?.registration?.id ?? null,
       registration: u?.registration ?? null,
-      
+
       batches: (u?.TraineeBatches || []).map(b => ({
         id: b?.id ?? null,
         name: b?.name ?? null
@@ -140,6 +140,10 @@ class TraineeService {
     return data
   }
 
+  async getBatchTrainees(batchId){
+    const batchTrainees = await traineeRepo.getBatchTrainees(batchId)
+    return batchTrainees
+  }
 
   /* ---------- DELETE ---------- */
   removeTrainee(id) {

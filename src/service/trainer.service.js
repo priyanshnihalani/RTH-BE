@@ -20,6 +20,11 @@ class TrainerService {
 
     return true;
   }
+  
+  async getTrainerBatches(trainerId) {
+    const data = await trainerRepo.getTrainerBatches(trainerId)
+    return data
+  }
 
   async updateTrainer(id, data) {
     const { batches = [] } = data;
@@ -45,8 +50,8 @@ class TrainerService {
         name: p.name,
         email: p.email,
         batchCount: batches.length,
-        batches: batches.map(b => b.name),   // array for frontend
-        batchIds: batches.map(b => b.id)      // useful for edit form
+        batches: batches.map(b => b.name),
+        batchIds: batches.map(b => b.id)
       };
     });
   }

@@ -8,40 +8,37 @@ exports.createTrainer = async (req, res) => {
   try {
     const { trainer } = await userService.createTrainer(req.body);
 
-    res.status(200).json({
+    return res.status(200).json({
       message: "Trainer created successfully",
       trainer,
     });
   } catch (err) {
-    res.status(400).json({ message: err.message });
+    return res.status(400).json({
+      message: err.message,
+    });
   }
 };
 
 /* =====================================================
-   REGISTER (TRAINEE)
+   REGISTER (TRAINEE) → SEND WAITING TOKEN
 ===================================================== */
 exports.register = async (req, res) => {
   try {
     const { waitingToken } = await userService.register(req.body);
 
-    res.cookie("waitingToken", waitingToken, {
-      httpOnly: true,
-      secure: false,        
-      sameSite: "lax",
-      maxAge: process.env.JWT_WAITING_EXPIRES * 60 * 60 * 1000,
-      path: "/",
-    });
-
-    res.status(200).json({
+    return res.status(200).json({
       message: "Registered successfully. Waiting for approval.",
+      waitingToken, 
     });
   } catch (err) {
-    res.status(400).json({ message: err.message });
+    return res.status(400).json({
+      message: err.message,
+    });
   }
 };
 
 /* =====================================================
-   LOGIN
+   LOGIN → SEND ACCESS TOKEN
 ===================================================== */
 exports.login = async (req, res) => {
   try {
@@ -49,30 +46,19 @@ exports.login = async (req, res) => {
 
     const { accessToken, user } =
       await userService.login(email, password);
-    res.cookie("accessToken", accessToken, {
-      httpOnly: true,
-      secure: false,
-      sameSite: "lax",
-      maxAge: process.env.JWT_ACCESS_EXPIRES * 60 * 60 * 1000,
-      path: "/",
-    });
 
-    res.clearCookie("waitingToken", {
-      httpOnly: true,
-      secure: false,
-      sameSite: "lax",
-      path: "/",
-    });
-
-    res.status(200).json({
+    return res.status(200).json({
       message: "Login successful",
+      accessToken, 
       role: user.role,
       status: user.status,
+      expiresIn:
+        process.env.JWT_ACCESS_EXPIRES * 60 * 60,
     });
-    console.log()
   } catch (err) {
-    console.log(err)
-    res.status(401).json({ message: err.message });
+    return res.status(401).json({
+      message: err.message,
+    });
   }
 };
 
@@ -81,48 +67,41 @@ exports.login = async (req, res) => {
 ===================================================== */
 exports.checkStatus = async (req, res) => {
   try {
-    const token = req.cookies.waitingToken;
-    if (!token) {
-      return res.status(200).json({ type: "none" });
+    const { waitingToken } = req.body;
+
+    if (!waitingToken) {
+      return res.status(200).json({
+        type: "none",
+      });
     }
 
     const decoded = jwt.verify(
-      token,
-      `${process.env.JWT_WAITING_SECRET}`
+      waitingToken,
+      process.env.JWT_WAITING_SECRET
     );
 
     const result =
       await userService.checkWaitingStatus(decoded.id);
 
+    /* ---------- USER APPROVED ---------- */
     if (result.upgraded) {
-      res.clearCookie("waitingToken", {
-        httpOnly: true,
-        secure: false,
-        sameSite: "lax",
-        path: "/",
-      });
-
-      res.cookie("accessToken", result.accessToken, {
-        httpOnly: true,
-        secure: false,
-        sameSite: "lax",
-        maxAge: process.env.JWT_ACCESS_EXPIRES * 60 * 60 * 1000,
-        path: "/",
-      });
-
       return res.status(200).json({
         type: "auth",
+        accessToken: result.accessToken, 
         role: result.user.role,
         status: "approved",
+        expiresIn:
+          process.env.JWT_ACCESS_EXPIRES * 60 * 60,
       });
     }
 
+    /* ---------- STILL WAITING ---------- */
     return res.status(200).json({
       type: "waiting",
       status: result.status,
     });
 
-  } catch {
+  } catch (err) {
     return res.status(200).json({
       type: "waiting",
       status: "pending",
@@ -131,46 +110,45 @@ exports.checkStatus = async (req, res) => {
 };
 
 /* =====================================================
-   LOGOUT
+   LOGOUT (FRONTEND CONTROLLED)
 ===================================================== */
-exports.logout = (req, res) => {
-  res.clearCookie("accessToken", {
-    httpOnly: true,
-    secure: false,
-    sameSite: "lax",
-    path: "/",
-  });
-
-  res.status(200).json({
+exports.logout = async (req, res) => {
+  return res.status(200).json({
     message: "Logged out successfully",
   });
 };
 
 /* =====================================================
-   AUTH ME
+   AUTH ME (VERIFY ACCESS TOKEN)
 ===================================================== */
 exports.me = async (req, res) => {
   try {
-    const token = req.cookies.accessToken;
-    if (!token) {
-      return res.status(401).json({ message: "Unauthorized" });
+    const { accessToken } = req.body;
+
+    if (!accessToken) {
+      return res.status(401).json({
+        message: "Unauthorized",
+      });
     }
 
     const decoded = jwt.verify(
-      token,
+      accessToken,
       process.env.JWT_ACCESS_SECRET
     );
 
     const user =
       await userService.getAuthUser(decoded.id);
 
-    res.status(200).json({
+    return res.status(200).json({
       id: user.user_id,
       role: user.role,
       status: user.status,
       type: "auth",
     });
-  } catch {
-    res.status(401).json({ message: "Invalid token" });
+
+  } catch (err) {
+    return res.status(401).json({
+      message: "Invalid token",
+    });
   }
 };

@@ -15,6 +15,10 @@ class TaskService {
     });
   }
 
+  async getTraineeTasks(trainerId, traineeId, batchId) {
+    return await taskRepository.getTraineeTasks(trainerId, traineeId, batchId)
+  }
+
   async sendBackForRework(taskId, trainerId, reviewComment) {
     const task = await taskRepository.findById(taskId);
 

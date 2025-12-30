@@ -1,4 +1,4 @@
-const { User, Registration, BatchTrainee } = require("../models");
+const { User, Registration, BatchTrainee, Batch } = require("../models");
 
 class TraineeRepository {
 
@@ -70,9 +70,23 @@ class TraineeRepository {
     return res
   }
 
-  async findUserById(id){
+  async findUserById(id) {
     return await User.findByPk(id)
   }
+
+  async getBatchTrainees(batchId) {
+    return User.findAll({
+      where: { role: "trainee" },
+      include: [
+        {
+          model: Batch,
+          where: { id: batchId },
+          through: { attributes: [] }
+        }
+      ]
+    });
+  }
+  
   /* ---------- DELETE ---------- */
   delete(id) {
     return User.update({ softDelete: true }, {

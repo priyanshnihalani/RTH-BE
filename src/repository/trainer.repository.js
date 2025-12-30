@@ -44,6 +44,19 @@ class TrainerRepository {
     });
   }
 
+  async getTrainerBatches(trainerId) {
+    return Batch.findAll({
+      include: [
+        {
+          model: User,
+          where: { user_id: trainerId },
+          through: { attributes: [] }
+        }
+      ]
+    });
+  }
+
+
   delete(trainerId) {
     return User.update({ softDelete: true }, {
       where: { user_id: trainerId, role: "trainer" }

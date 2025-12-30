@@ -16,6 +16,16 @@ class TaskRepository {
     });
   }
 
+  async getTraineeTasks(trainerId, traineeId, batchId) {
+    return Task.findAll({
+      where: {
+        trainerId,
+        traineeId,
+        batchId
+      }
+    });
+  }
+
   findByBatch(batchId) {
     return Task.findAll({
       where: { batchId }

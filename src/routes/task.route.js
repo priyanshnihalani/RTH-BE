@@ -7,5 +7,6 @@ router.patch("/update/:id/rework", controller.sendBackForRework);
 
 router.get("/mytasks", controller.getMyTasks);
 router.patch("/update/:id/status", controller.updateTaskStatus);
+router.post("/task/trainee", controller.getTraineeTasks)
 
 module.exports = router;

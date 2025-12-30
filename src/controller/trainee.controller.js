@@ -16,6 +16,18 @@ exports.getAll = async (req, res) => {
   res.json(data);
 };
 
+exports.getBatchTrainees = async (req, res) => {
+  try{
+    const data = await traineeService.getBatchTrainees(req.body.batchId)
+    res.json(data)
+  }
+  catch(err){
+    res.status(400).json({
+      success: false,
+      message: err.message
+    });
+  }
+}
 /* ---------- UPDATE STATUS ---------- */
 
 exports.updateTrainee = async (req, res) => {
@@ -24,7 +36,6 @@ exports.updateTrainee = async (req, res) => {
     const data = req.body;
 
     await traineeService.updateTrainee(traineeId, data);
-
     res.status(200).json({
       success: true,
       message: "Trainee updated successfully"
