@@ -13,15 +13,14 @@ class BatchService {
 
     return batches.map(b => {
       const plain = b.get({ plain: true });
-
       return {
         id: plain.id,
         name: plain.name,
         technology: plain.technology,
         startDate: plain.startDate,
         endDate: plain.endDate,
-        traineeCount: Number(plain.traineeCount),
-        trainerName: plain.Users?.[0]?.name || "Not Assigned"
+        traineeCount: Number(plain?.Trainees?.length || 0),
+        trainerName: plain.Trainers?.[0]?.name || "Not Assigned"
       };
     });
   }

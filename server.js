@@ -18,6 +18,8 @@ app.use('/api/trainer', require('./src/routes/trainer.route'));
 app.use("/api/notes", require("./src/routes/note.route"));
 app.use("/api/batch", require("./src/routes/batch.route"));
 app.use("/api/task", require("./src/routes/task.route"));
+app.use("/api/generateOfferLetter", require("./src/routes/offer.route"));
+app.use("/public", express.static("public"));
 
 (async () => {
   try {

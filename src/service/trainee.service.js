@@ -22,7 +22,7 @@ class TraineeService {
       certificateIssued,
       ndaSigned,
       adharSubmitted,
-      remarks,
+      remarks2,
     } = data;
 
     if (!Array.isArray(batchIds)) {
@@ -49,7 +49,7 @@ class TraineeService {
       certificateIssued,
       ndaSigned,
       adharSubmitted,
-      remarks,
+      remarks2,
     });
 
     /* ================= 3. STATUS TRANSITIONS ================= */
@@ -126,10 +126,11 @@ class TraineeService {
       name: u?.name ?? null,
       email: u?.email ?? null,
       status: u?.status ?? null,
-
+      joinedAt: u?.joinedAt ?? null,
+      shift: u?.shift,
       registrationId: u?.registration?.id ?? null,
       registration: u?.registration ?? null,
-
+      technology: u?.technology ?? null,
       batches: (u?.TraineeBatches || []).map(b => ({
         id: b?.id ?? null,
         name: b?.name ?? null
@@ -140,7 +141,7 @@ class TraineeService {
     return data
   }
 
-  async getBatchTrainees(batchId){
+  async getBatchTrainees(batchId) {
     const batchTrainees = await traineeRepo.getBatchTrainees(batchId)
     return batchTrainees
   }

@@ -8,7 +8,7 @@ const Registration = sequelize.define("Registration", {
     primaryKey: true
   },
 
-  user_id: {                     
+  user_id: {
     type: DataTypes.UUID,
     allowNull: false,
     unique: true
@@ -47,6 +47,13 @@ const Registration = sequelize.define("Registration", {
     type: DataTypes.BOOLEAN,
     defaultValue: false
   },
+
+  shift: {
+    type: DataTypes.BOOLEAN,
+    defaultValue: true
+  },
+
+  joinedDate: DataTypes.DATEONLY,
 
   remarks1: DataTypes.TEXT,
   remarks2: DataTypes.TEXT

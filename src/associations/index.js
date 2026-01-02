@@ -80,13 +80,15 @@ Task.belongsTo(User, {
    Trainee ↔ Task (Assigned To)
 ================================ */
 User.hasMany(Task, {
-  foreignKey: "trainee_id",
+  foreignKey: "traineeId",  
   as: "MyTasks"
 });
+
 Task.belongsTo(User, {
-  foreignKey: "trainee_id",
+  foreignKey: "traineeId",   
   as: "Trainee"
 });
+
 
 /* ===============================
    Trainer ↔ Trainer Notes (1:N)

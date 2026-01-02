@@ -26,8 +26,8 @@ exports.update = async (req, res) => {
 };
 
 exports.getTrainerBatches = async (req, res) => {
-  const data = trainerService.getTrainerBatches(req.body.trainerId)
-  return data
+  const data = await trainerService.getTrainerBatches(req.body.trainerId)
+  return res.status(200).json(data);
 }
 
 exports.getAll = async (req, res) => {

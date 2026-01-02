@@ -23,28 +23,41 @@ const Task = sequelize.define("Task", {
 
   reviewComment: {
     type: DataTypes.TEXT,
-    allowNull: true
+    allowNull: true,
+    field: "reviewComment"
   },
 
-  trainerId: {
-    type: DataTypes.INTEGER,
-    allowNull: false
+  assignedBy: {
+    type: DataTypes.UUID,
+    allowNull: false,
+    field: "assigned_by"
   },
 
   batchId: {
     type: DataTypes.INTEGER,
-    allowNull: false
+    allowNull: false,
+    field: "batch_id"
+  },
+
+  trainerId: {
+    type: DataTypes.UUID,
+    allowNull: false,
+    field: "trainee_id"
   },
 
   traineeId: {
-    type: DataTypes.INTEGER,
-    allowNull: false
+    type: DataTypes.UUID,
+    allowNull: false,
+    field: "trainee_id"
   },
-  
+
   softDelete: {
     type: DataTypes.BOOLEAN,
     defaultValue: false
   }
+}, {
+  tableName: "Tasks",
+  timestamps: true
 });
 
 module.exports = Task;

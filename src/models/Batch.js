@@ -7,8 +7,8 @@ const Batch = sequelize.define("Batch", {
     allowNull: false
   },
   technology: DataTypes.STRING,
-  startDate: DataTypes.DATEONLY,
-  endDate: DataTypes.DATEONLY,
+  startDate: { type: DataTypes.DATEONLY, allowNull: true },
+  endDate: { type: DataTypes.DATEONLY, allowNull: true },
   softDelete: {
     type: DataTypes.BOOLEAN,
     defaultValue: false

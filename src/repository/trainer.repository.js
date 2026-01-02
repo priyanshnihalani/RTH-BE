@@ -49,9 +49,15 @@ class TrainerRepository {
       include: [
         {
           model: User,
+          as: "Trainers",
           where: { user_id: trainerId },
           through: { attributes: [] }
-        }
+        },
+        {
+          model: User,
+          as: "Trainees",
+          through: { attributes: [] }
+        },
       ]
     });
   }

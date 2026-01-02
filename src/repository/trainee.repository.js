@@ -1,11 +1,11 @@
-const { User, Registration, BatchTrainee, Batch } = require("../models");
+const { User, Registration, BatchTrainee, Batch, Task } = require("../models");
 
 class TraineeRepository {
 
   /* ---------- UPDATE USER STATUS ---------- */
   async updateStatus(id, data) {
     const [updated] = await User.update(data, {
-      where: { user_id: id, role: "trainee" }
+      where: { user_id: id, role: "trainee", softDelete: false }
     });
 
     if (!updated) return null;
@@ -51,8 +51,11 @@ class TraineeRepository {
 
   /* ---------- FETCH ALL ---------- */
   async findAll() {
-    const res = await User.findAll({
-      where: { role: "trainee" },
+    return await User.findAll({
+      where: {
+        role: "trainee",
+        softDelete: false
+      },
       attributes: ["user_id", "name", "email", "status"],
       include: [
         {
@@ -67,7 +70,6 @@ class TraineeRepository {
         }
       ]
     });
-    return res
   }
 
   async findUserById(id) {
@@ -75,18 +77,27 @@ class TraineeRepository {
   }
 
   async getBatchTrainees(batchId) {
-    return User.findAll({
-      where: { role: "trainee" },
+    return Batch.findByPk(batchId, {
       include: [
         {
-          model: Batch,
-          where: { id: batchId },
-          through: { attributes: [] }
+          model: User,
+          as: "Trainees",
+          where: { role: "trainee", softDelete: false },
+          through: { attributes: [] },
+          required: true,
+          include: [
+            {
+              model: Task,
+              as: "MyTasks",
+              where: { softDelete: false },
+              required: false
+            }
+          ]
         }
       ]
     });
   }
-  
+
   /* ---------- DELETE ---------- */
   delete(id) {
     return User.update({ softDelete: true }, {

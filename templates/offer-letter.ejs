@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8" />
+    <title>Offer Letter</title>
+
+    <style>
+        body {
+            font-family: "Times New Roman", serif;
+            font-size: 14px;
+            line-height: 1.6;
+            color: #000;
+            margin: 40px;
+        }
+
+        /* WATERMARK IMAGE */
+        .watermark {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            width: 420px;
+            opacity: 0.08;
+            transform: translate(-50%, -50%) rotate(-30deg);
+            z-index: -1;
+        }
+
+        .center {
+            text-align: center;
+        }
+
+        .bold {
+            font-weight: bold;
+        }
+
+        .spacer {
+            margin-top: 20px;
+        }
+
+        .footer {
+            margin-top: 40px;
+            font-size: 12px;
+            text-align: center;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- STATIC WATERMARK -->
+    <img src="http://localhost:3000/public/images/logo.png" class="watermark" />
+
+    <p>Date: <%= joinedAt %>
+    </p>
+
+    <p>
+        To,<br />
+        <%= name %><br />
+            Junagadh-362001
+    </p>
+
+    <p class="center bold">Offer Letter</p>
+
+    <p>Dear <%= firstName %>,</p>
+
+    <p>
+        We are pleased an offer to you for a training opportunity at
+        <strong>Techrover Solutions Training Center</strong>.
+        We believe that your skills, talents, and potential will make a valuable
+        contribution to our organization. This offer letter outlines the details
+        of your training program, which is set to commence on Dt. <%= joinedAt %>.
+    </p>
+
+    <p>
+        <strong>Training Program Overview:</strong>
+        During your training (<%= duration %>), you will have the opportunity to
+            gain hands-on experience and knowledge in <%= technology %>.
+                Our program is designed to provide you with practical skills and insights
+                to help you develop your career in this field.
+    </p>
+
+    <p><strong>Terms and Conditions:</strong></p>
+
+    <p><strong>Attendance:</strong>
+        You are expected to attend all training sessions, workshops, and meetings
+        as required.
+    </p>
+
+    <p><strong>Confidentiality:</strong>
+        You will be required to sign a confidentiality agreement to protect the
+        company's proprietary information.
+    </p>
+
+    <p><strong>Evaluation:</strong>
+        Your performance during the training program will be regularly reviewed
+        to ensure your progress aligns with our training objectives.
+    </p>
+
+    <p><strong>Compensation:</strong>
+        <%= compensation %>
+    </p>
+
+    <p><strong>Employment:</strong>
+        This training program does not guarantee employment with Techrover Solutions
+        Pvt. Ltd. Any potential employment opportunities will be discussed upon
+        successful completion of the training.
+    </p>
+
+    <p>
+        If you have any questions or need further information, please feel free to
+        contact <%= contactPerson %> at Junagadh office.
+    </p>
+
+    <p>
+        Congratulations on your selection for our training program. We believe it
+        will be a mutually rewarding experience.
+    </p>
+
+    <div class="spacer"></div>
+
+    <p>Sincerely,</p>
+
+    <p>
+        <strong>
+            <%= signerName %>
+        </strong><br />
+        <%= signerDesignation %><br />
+            Techrover Solutions
+    </p>
+
+    <p>
+        B6, Milestone Complex,<br />
+        Zanzarda Road, Junagadh<br />
+        M. <%= signerMobile %>
+    </p>
+
+    <div class="footer">
+        <p class="bold">Techrover Solutions</p>
+        <p>
+            406, Milestone Complex, Zanzarda Road, Junagadh, Gujarat-362001<br />
+            [P] +91 9825997073 | [E] info@techroversolutions.com |
+            [W] www.techroversolutions.com<br />
+            CIN - U72900GJ2020OPC113964
+        </p>
+    </div>
+
+</body>
+
+</html>
