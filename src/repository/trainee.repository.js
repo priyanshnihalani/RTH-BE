@@ -73,7 +73,15 @@ class TraineeRepository {
   }
 
   async findUserById(id) {
-    return await User.findByPk(id)
+    return await User.findByPk(id, {
+      include: [
+        {
+          model: Registration,
+          as: "registration",
+          required: false
+        }
+      ]
+    })
   }
 
   async getBatchTrainees(batchId) {

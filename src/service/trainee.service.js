@@ -6,10 +6,14 @@ const { generatePassword } = require("../utils/generatePassword");
 
 class TraineeService {
 
+  async getTraineeById(id) {
+    const result = await traineeRepo.findUserById(id);
+    return result;
+  }
   /* ---------- UPDATE TRAINEE DETAILS ---------- */
   async updateTrainee(userId, data) {
     const {
-      batchIds = [],
+      batches = [],
       admissionStatus,
       education,
       semester,
@@ -23,10 +27,13 @@ class TraineeService {
       ndaSigned,
       adharSubmitted,
       remarks2,
+      wantToBoard,
+      joinedDate,
+      shift
     } = data;
 
-    if (!Array.isArray(batchIds)) {
-      throw new Error("batchIds must be an array");
+    if (!Array.isArray(batches)) {
+      throw new Error("batches must be an array");
     }
 
     /* ================= 1. GET CURRENT REGISTRATION ================= */
@@ -50,6 +57,9 @@ class TraineeService {
       ndaSigned,
       adharSubmitted,
       remarks2,
+      wantToBoard,
+      joinedDate,
+      shift
     });
 
     /* ================= 3. STATUS TRANSITIONS ================= */
@@ -87,7 +97,7 @@ class TraineeService {
     }
 
     /* ================= 4. ASSIGN BATCHES ================= */
-    await traineeRepo.assignBatches(userId, batchIds);
+    await traineeRepo.assignBatches(userId, batches);
 
     return true;
   }
@@ -134,8 +144,8 @@ class TraineeService {
       batches: (u?.TraineeBatches || []).map(b => ({
         id: b?.id ?? null,
         name: b?.name ?? null
-      }))
-
+      })),
+      wantToBoard: u?.wantToBoard
     }));
 
     return data

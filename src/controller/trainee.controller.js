@@ -1,5 +1,14 @@
 const traineeService = require("../service/trainee.service");
 
+exports.getTraineeById = async (req, res) => {
+  try {
+    const data = await traineeService.getTraineeById(req.body.id);
+    res.status(200).json({ message: "Trainee Founded successfully",  data});
+  }
+  catch (err) {
+    res.status(400).json({ message: err.message });
+  }
+}
 /* ---------- UPDATE ---------- */
 exports.update = async (req, res) => {
   try {
@@ -17,11 +26,11 @@ exports.getAll = async (req, res) => {
 };
 
 exports.getBatchTrainees = async (req, res) => {
-  try{
+  try {
     const data = await traineeService.getBatchTrainees(req.body.batchId)
     res.json(data)
   }
-  catch(err){
+  catch (err) {
     res.status(400).json({
       success: false,
       message: err.message
@@ -35,7 +44,7 @@ exports.updateTrainee = async (req, res) => {
     const traineeId = req.params.id;
     const data = req.body;
 
-    await traineeService.updateTrainee(traineeId, data);
+    const resdata = await traineeService.updateTrainee(traineeId, data);
     res.status(200).json({
       success: true,
       message: "Trainee updated successfully"

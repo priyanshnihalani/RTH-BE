@@ -1,4 +1,4 @@
-const { DataTypes } = require('sequelize')
+const { DataTypes } = require("sequelize");
 const sequelize = require("../../config/db");
 
 const Registration = sequelize.define("Registration", {
@@ -13,14 +13,15 @@ const Registration = sequelize.define("Registration", {
     allowNull: false,
     unique: true
   },
-
   education: DataTypes.STRING,
   semester: DataTypes.STRING,
   college: DataTypes.STRING,
   technology: DataTypes.STRING,
   duration: DataTypes.STRING,
+
   totalFee: DataTypes.INTEGER,
   remainingFee: DataTypes.INTEGER,
+
   inquiryDate: DataTypes.DATEONLY,
 
   admissionStatus: {
@@ -31,6 +32,11 @@ const Registration = sequelize.define("Registration", {
   trainingStatus: {
     type: DataTypes.ENUM("not_started", "ongoing", "completed", "dropped"),
     defaultValue: "not_started"
+  },
+
+  wantToBoard: {
+    type: DataTypes.BOOLEAN,
+    defaultValue: false
   },
 
   certificateIssued: {
@@ -58,6 +64,5 @@ const Registration = sequelize.define("Registration", {
   remarks1: DataTypes.TEXT,
   remarks2: DataTypes.TEXT
 });
-
 
 module.exports = Registration;

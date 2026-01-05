@@ -4,9 +4,8 @@ const generatePDF = require("../utils/generatePdf");
 
 exports.generateOfferLetter = async (req, res) => {
   const data = req.body;
-
   const html = await ejs.renderFile(
-    path.join(__dirname, "../templates/offer-letter.ejs"),
+    path.join(__dirname, "../../templates/offer-letter.ejs"),
     data
   );
 
