@@ -4,10 +4,10 @@ require("./src/associations")
 const cors = require('cors')
 require("dotenv").config();
 const cookieParser = require("cookie-parser");
+
 const app = express();
 
 app.use(cors())
-
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
@@ -19,6 +19,9 @@ app.use("/api/notes", require("./src/routes/note.route"));
 app.use("/api/batch", require("./src/routes/batch.route"));
 app.use("/api/task", require("./src/routes/task.route"));
 app.use("/api/generateOfferLetter", require("./src/routes/offer.route"));
+app.use("/api/preboard", require("./src/routes/preboardProgress.route"));
+app.use("/api/predoc", require("./src/routes/predocProgress.route"));
+
 app.use("/public", express.static("public"));
 
 (async () => {

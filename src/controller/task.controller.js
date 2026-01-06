@@ -6,7 +6,6 @@ exports.assignTask = async (req, res) => {
   try {
     const task = await taskService.assignTask({
       ...req.body,
-      trainerId: req.user.id
     });
 
     res.status(201).json(task);
@@ -45,7 +44,7 @@ exports.sendBackForRework = async (req, res) => {
 
 exports.getMyTasks = async (req, res) => {
   try {
-    const tasks = await taskService.getMyTasks(req.user.id);
+    const tasks = await taskService.getMyTasks(req.body.traineeId);
     res.json(tasks);
   } catch (err) {
     res.status(400).json({ message: err.message });
@@ -55,9 +54,7 @@ exports.getMyTasks = async (req, res) => {
 exports.updateTaskStatus = async (req, res) => {
   try {
     const task = await taskService.updateTaskStatus(
-      req.params.id,
-      req.user.id,
-      req.body.status
+      {...req.body}
     );
 
     res.json(task);
