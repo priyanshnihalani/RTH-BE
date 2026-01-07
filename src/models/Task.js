@@ -29,7 +29,7 @@ const Task = sequelize.define("Task", {
 
   assignedBy: {
     type: DataTypes.UUID,
-    allowNull: false,
+    allowNull: true,
     field: "assigned_by"
   },
 

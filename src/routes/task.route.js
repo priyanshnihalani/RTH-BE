@@ -5,8 +5,8 @@ const controller = require("../controller/task.controller");
 router.post("/assign", controller.assignTask);
 router.patch("/update/:id/rework", controller.sendBackForRework);
 
-router.get("/mytasks", controller.getMyTasks);
-router.patch("/update/:id/status", controller.updateTaskStatus);
+router.post("/mytasks", controller.getMyTasks);
+router.put("/update/status", controller.updateTaskStatus);
 router.post("/traineetask", controller.getTraineeTasks)
 
 module.exports = router;

@@ -1,3 +1,4 @@
+const { connect } = require("../routes/user.route");
 const taskService = require("../service/task.service");
 
 /* ================= TRAINER ================= */
@@ -53,10 +54,8 @@ exports.getMyTasks = async (req, res) => {
 
 exports.updateTaskStatus = async (req, res) => {
   try {
-    const task = await taskService.updateTaskStatus(
-      {...req.body}
-    );
-
+    const {newStatus, taskId, traineeId} = req.body
+    const task = await taskService.updateTaskStatus(taskId, traineeId, newStatus);
     res.json(task);
   } catch (err) {
     res.status(400).json({ message: err.message });
