@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <title>Internship Certificate</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: "Times New Roman", serif;
+            background: #ffffff;
+        }
+
+        /* ================= CERTIFICATE ================= */
+        @page {
+            size: A4 landscape;
+            margin: 0;
+        }
+
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+        }
+
+        .certificate {
+            width: 297mm;
+            height: 210mm;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .certificate,
+        .left,
+        .right {
+            page-break-inside: avoid;
+        }
+
+
+        /* ================= LEFT CONTENT ================= */
+        .left {
+            padding: 60px 80px;
+            width: 70%;
+        }
+
+        .logo img {
+            height: 80px;
+        }
+
+        .managed {
+            margin-top: 10px;
+            font-size: 16px;
+        }
+
+        .date {
+            margin-top: 60px;
+            font-size: 18px;
+        }
+
+        .name {
+            margin-top: 20px;
+            font-size: 44px;
+            font-weight: bold;
+        }
+
+        .text {
+            margin-top: 20px;
+            font-size: 22px;
+            line-height: 1.6;
+        }
+
+        .course {
+            margin-top: 12px;
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        .duration {
+            margin-top: 18px;
+            font-size: 20px;
+        }
+
+        /* ================= SIGNATURE ================= */
+        .signature {
+            position: absolute;
+            bottom: 80px;
+            left: 80px;
+            font-size: 18px;
+            text-align: center;
+        }
+
+        .signature .line {
+            width: 200px;
+            height: 1px;
+            background: #000;
+            margin: 6px auto;
+        }
+
+        .signature .managername {
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        /* ================= RIGHT RIBBON ================= */
+        .right {
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 30%;
+            height: 100%;
+            padding-left: 20px;
+            padding-right: 20px;
+        }
+
+        .ribbon {
+            height: 100%;
+            display: flex;
+            align-items: flex-start;
+        }
+
+        .ribbon img {
+            display: block;
+            width: 100%;
+            height: 80%;
+            object-fit: contain;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="certificate">
+
+        <!-- LEFT -->
+        <div class="left">
+            <div class="logo">
+                <img src="http://localhost:3000/public/images/logoclipath.png" alt="Rover Logo">
+            </div>
+
+            <div class="managed">Managed by Techrover Solutions</div>
+
+            <div class="date">
+                <%= endDate %>
+            </div>
+
+            <div class="name">
+                <%= name %>
+            </div>
+
+            <div class="text">has successfully completed</div>
+
+            <div class="course">
+                <%= batch %>
+            </div>
+
+            <div class="duration">
+                Internship duration was <%= duration %> from <%= startDate %> to <%= endDate %>
+            </div>
+        </div>
+
+        <!-- SIGNATURE -->
+        <div class="signature">
+            <div class="managername">
+                <%= manager %>
+            </div>
+            <div class="line"></div>
+            <div>Manager, Junagadh</div>
+        </div>
+
+        <!-- RIGHT RIBBON -->
+        <div class="right">
+            <div class="ribbon">
+                <img src="http://localhost:3000/public/images/Group.png" alt="Ribbon">
+            </div>
+        </div>
+
+    </div>
+
+</body>
+
+</html>

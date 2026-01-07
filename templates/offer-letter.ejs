@@ -1,163 +1,221 @@
 <!DOCTYPE html>
 <html>
+
 <head>
-  <meta charset="UTF-8" />
-  <title>Offer Letter</title>
+    <meta charset="UTF-8" />
+    <title>Offer Letter</title>
 
-  <style>
-    /* ================= PAGE SETUP ================= */
-    body {
-      width: 700px;
-      margin: 40px auto;
-      font-family: "Times New Roman", serif;
-      font-size: 14px;
-      line-height: 1.6;
-      color: #000;
-    }
+    <style>
+        @page {
+            size: A4;
+            margin: 40px;
+        }
 
-    p {
-      margin: 0 0 12px 0;
-    }
+        body {
+            font-family: "Times New Roman", serif, Arial, sans-serif;
+            font-size: 14px;
+            color: #000;
+            margin: 0;
+        }
 
-    /* ================= HEADER ================= */
-    .company-header {
-      text-align: center;
-      font-size: 12px;
-      margin-bottom: 30px;
-    }
 
-    .company-header strong {
-      font-size: 14px;
-    }
+        /* ================= PAGE WIDTH ================= */
+        .container {
+            width: 600px;
+            margin: 0 auto;
+            position: relative;
+        }
 
-    /* ================= TITLE ================= */
-    .title {
-      text-align: center;
-      font-weight: bold;
-      margin: 20px 0;
-    }
+        p {
+            margin: 0 0 12px 0;
+            text-align: justify;
+        }
 
-    /* ================= SECTION HEADINGS ================= */
-    .section-title {
-      font-weight: bold;
-      margin-top: 15px;
-    }
+        /* ================= HEADER ================= */
+        .header {
+            position: relative;
+            height: 100px;
+        }
 
-    /* ================= TERMS ================= */
-    ol {
-      margin: 5px 0 15px 20px;
-      padding: 0;
-    }
+        .logo {
+            position: absolute;
+            margin-top: 10px;
+            right: 0;
+            top: 0;
+            width: 220px;
+        }
 
-    li {
-      margin-bottom: 8px;
-    }
+        .date {
+            position: absolute;
+            right: 0;
+            top: 80px;
+            font-size: 14px;
+        }
 
-    /* ================= FOOTER ================= */
-    .footer {
-      margin-top: 60px;
-      font-size: 11px;
-      text-align: center;
-    }
+        /* ================= ADDRESS ================= */
+        .address {
+            margin-top: 40px;
+        }
 
-    /* ================= WATERMARK ================= */
-    .watermark {
-      position: fixed;
-      top: 50%;
-      left: 50%;
-      width: 420px;
-      opacity: 0.06;
-      transform: translate(-50%, -50%) rotate(-30deg);
-      z-index: -1;
-    }
-  </style>
+        /* ================= TITLE ================= */
+        .title {
+            text-align: center;
+            font-weight: bold;
+            text-decoration: underline;
+            margin: 30px 0;
+            font-size: 16px;
+        }
+
+        /* ================= SECTION TITLES ================= */
+        .section-title {
+            font-weight: bold;
+            margin-top: 16px;
+        }
+
+        /* ================= TERMS ================= */
+        ol {
+            margin: 5px 0 12px 18px;
+            padding: 0;
+        }
+
+        li {
+            margin-bottom: 5px;
+        }
+
+        /* ================= SIGNATURE ================= */
+        .signature {
+            margin-top: 50px;
+            direction: rtl;
+            /* anchors block to right */
+        }
+
+        .signature p {
+            direction: ltr;
+            /* keeps English readable */
+            text-align: right;
+            width: fit-content;
+            /* shrink to content width */
+        }
+
+        /* ================= FOOTER ================= */
+        .footer {
+            margin-top: 50px;
+            padding: 12px 0;
+            width: 100%;
+            text-align: center;
+            font-size: 12px;
+        }
+
+        /* REMOVE DEFAULT P MARGINS */
+        .footer p {
+            margin: 4px 0;
+        }
+
+        /* CENTER TITLE PROPERLY */
+        .footer strong {
+            display: block;
+            margin-bottom: 6px;
+            font-size: 13px;
+        }
+    </style>
 </head>
 
 <body>
 
-  <!-- WATERMARK -->
-  <img src="http://localhost:3000/public/images/logo.png" class="watermark" />
+    <div class="container">
 
-  <!-- COMPANY HEADER -->
-  <div class="company-header">
-    <strong>Techrover Solutions</strong><br />
-    406, Milestone Complex, Zanzarda Road, Junagadh, Gujarat-362001<br />
-    [P] +91 9825997073 | [E] info@techroversolutions.com | [W] www.techroversolutions.com<br />
-    CIN - U72900GJ2020OPC113964
-  </div>
+        <!-- HEADER -->
+        <div class="header">
+            <img src="http://localhost:3000/public/images/logo.png" class="logo" alt="TechRover Logo" />
+            <div class="date">Date: <%= joinedAt %>
+            </div>
+        </div>
 
-  <!-- DATE -->
-  <p>Date: <%= joinedAt %></p>
+        <!-- ADDRESS -->
+        <div class="address">
+            <p>
+                To,<br />
+                <%= name %><br />
+                    Junagadh-362001
+            </p>
+        </div>
 
-  <!-- ADDRESS -->
-  <p>
-    To,<br />
-    <%= name %><br />
-    Junagadh-362001
-  </p>
+        <!-- TITLE -->
+        <div class="title">Offer Letter</div>
 
-  <!-- TITLE -->
-  <p class="title">Offer Letter</p>
+        <!-- BODY -->
+        <p>Dear <%= firstName %>,</p>
 
-  <!-- BODY -->
-  <p>Dear <%= firstName %>,</p>
+        <p>
+            We are pleased an offer to you for a training opportunity at
+            <strong>Techrover Solutions Training Center</strong>. We believe that your skills,
+            talents, and potential will make a valuable contribution to our organization.
+            This offer letter outlines the details of your training program, which is set to
+            commence on Dt. <%= joinedAt %>.
+        </p>
 
-  <p>
-    We are pleased an offer to you for a training opportunity at
-    <strong>Techrover Solutions Training Center</strong>. We believe that your skills,
-    talents, and potential will make a valuable contribution to our organization.
-    This offer letter outlines the details of your training program, which is set to
-    commence on Dt. <%= joinedAt %>.
-  </p>
 
-  <p class="section-title">Training Program Overview:</p>
+        <p>
+            <span>Training Program Overview:</span>
+            During your training (<%= duration %>), you will have the opportunity to gain
+                hands-on experience and knowledge in <%= technology %>. Our program is designed
+                    to provide you with practical skills and insights to help you develop your career
+                    in this field.
+        </p>
 
-  <p>
-    During your training (<%= duration %>), you will have the opportunity to gain
-    hands-on experience and knowledge in <%= technology %>. Our program is designed
-    to provide you with practical skills and insights to help you develop your career
-    in this field.
-  </p>
+        <p>Terms and Conditions:</p>
 
-  <p class="section-title">Terms and Conditions:</p>
+        <ol>
+            <li>Attendance: You are expected to attend all training sessions, workshops, and meetings
+                as required.</li>
+            <li>Confidentiality: You will be required to sign a confidentiality agreement to protect
+                the company's proprietary information.</li>
+            <li>Evaluation: Your performance during the training program will be regularly reviewed to
+                ensure your progress aligns with our training objectives.</li>
+            <li>Compensation:
+                <%= compensation %>
+            </li>
+            <li>Employment: This training program does not guarantee employment with Techrover
+                Solutions Pvt. Ltd. Any potential employment opportunities will be discussed upon successful completion
+                of the training.</li>
+        </ol>
 
-  <ol>
-    <li><strong>Attendance:</strong> You are expected to attend all training sessions, workshops, and meetings as required.</li>
-    <li><strong>Confidentiality:</strong> You will be required to sign a confidentiality agreement to protect the company's proprietary information.</li>
-    <li><strong>Evaluation:</strong> Your performance during the training program will be regularly reviewed to ensure your progress aligns with our training objectives.</li>
-    <li><strong>Compensation:</strong> <%= compensation %></li>
-    <li><strong>Employment:</strong> This training program does not guarantee employment with Techrover Solutions Pvt. Ltd. Any potential employment opportunities will be discussed upon successful completion of the training.</li>
-  </ol>
+        <div style="display: flex; flex-direction: column; gap: -1px;">
+            <p style="margin: 0;">
+                If you have any questions or need further information, please feel free to contact
+                <%= contactPerson %> at Junagadh office.
+            </p>
+            <p style="margin: 0;">
+                Congratulations on your selection for our training program. We believe it will be
+                a mutually rewarding experience.
+            </p>
+        </div>
 
-  <p>
-    If you have any questions or need further information, please feel free to contact
-    <%= contactPerson %> at Junagadh office.
-  </p>
+        <!-- SIGNATURE -->
+        <div class="signature">
+            <p>
+                Sincerely,<br>
+                <strong>
+                    <%= signerName %>
+                </strong><br />
+                <%= signerDesignation %><br />
+                    Techrover Solutions<br />
+                    B6, Milestone Complex,<br />
+                    Zanzarda Road, Junagadh<br />
+                    M. <%= signerMobile %>
+            </p>
+        </div>
 
-  <p>
-    Congratulations on your selection for our training program. We believe it will be
-    a mutually rewarding experience.
-  </p>
-
-  <!-- SIGNATURE -->
-  <p>Sincerely,</p>
-
-  <p>
-    <strong><%= signerName %></strong><br />
-    <%= signerDesignation %><br />
-    Techrover Solutions
-  </p>
-
-  <p>
-    B6, Milestone Complex,<br />
-    Zanzarda Road, Junagadh<br />
-    M. <%= signerMobile %>
-  </p>
-
-  <!-- FOOTER -->
-  <div class="footer">
-    <strong>Techrover Solutions</strong>
-  </div>
-
+        <!-- FOOTER -->
+        <div class="footer">
+            <strong>Techrover Solutions</strong>
+            <div
+                style="display: flex; justify-content: center; align-items: center; margin-bottom: 4px; flex-direction: column; color: gray;">
+                <p>406, Milestone Complex, Zanzarda Road, Junagadh, Gujarat-362001</p>
+                <p>[P] +91 9825997073 | [E] info@techroversolutions.com | [W] www.techroversolutions.com</p>
+                <p>CIN - U72900GJ2020OPC113964</p>
+            </div>
+        </div>
+    </div>
 </body>
 </html>
