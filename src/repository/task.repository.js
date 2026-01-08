@@ -13,7 +13,15 @@ class TaskRepository {
 
   findByTrainee(traineeId) {
     return Task.findAll({
-      where: { traineeId }
+      where: { traineeId },
+      include: [
+        {
+          association: "Batch",
+          attributes: ["id", "name"],
+          where: { softDelete: false },
+          required: true
+        }
+      ]
     });
   }
 
@@ -24,10 +32,11 @@ class TaskRepository {
         traineeId,
         batchId
       },
-      include:[
+      include: [
         {
           model: Batch,
           as: "Batch",
+          where: { softDelete: false },
           required: false
         }
       ]

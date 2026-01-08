@@ -11,6 +11,7 @@ class BatchRepository {
   /* ---------- FIND ALL WITH COUNTS ---------- */
   async findAllWithDetails() {
     return Batch.findAll({
+      where: { softDelete: false },
       attributes: [
         "id",
         "name",

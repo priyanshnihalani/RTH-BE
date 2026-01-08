@@ -82,7 +82,8 @@ class TraineeRepository {
         },
         {
           model: Batch,
-          as: "TraineeBatches",   
+          as: "TraineeBatches",
+          where: { softDelete: false },
           through: { attributes: [] },
           required: false,
         },

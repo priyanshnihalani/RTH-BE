@@ -34,6 +34,7 @@ class TrainerRepository {
         {
           association: "TrainerBatches",
           attributes: ["id", "name"],
+          where: { softDelete: false },
           through: { attributes: [] },
           required: false
         }
@@ -43,6 +44,7 @@ class TrainerRepository {
 
   async getTrainerBatches(trainerId) {
     return Batch.findAll({
+      where: { softDelete: false },
       include: [
         {
           model: User,
