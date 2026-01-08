@@ -44,31 +44,33 @@ class TrainerRepository {
 
   async getTrainerBatches(trainerId) {
     return Batch.findAll({
-      where: { softDelete: false },
+      where: {
+        softDelete: false
+      },
       include: [
         {
           model: User,
           as: "Trainers",
           where: { user_id: trainerId },
           through: { attributes: [] },
-          include: [
-            {
-              model: Task,
-              as: "AssignedTasks",
-              where: { softDelete: false },
-              required: false
-            }
-          ]
+          required: true
+        },
+        {
+          model: Task,
+          as: "Tasks", // 👈 Batch.hasMany(Task, as: "Tasks")
+          where: {
+            softDelete: false
+          },
+          required: false
         },
         {
           model: User,
           as: "Trainees",
-          through: { attributes: [] },
-        },
+          through: { attributes: [] }
+        }
       ]
     });
   }
-
 
   delete(trainerId) {
     return User.update({ softDelete: true }, {
