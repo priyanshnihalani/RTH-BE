@@ -1,3 +1,4 @@
+const { Batch } = require("../models");
 const Task = require("../models/Task");
 
 class TaskRepository {
@@ -22,7 +23,14 @@ class TaskRepository {
         trainerId,
         traineeId,
         batchId
-      }
+      },
+      include:[
+        {
+          model: Batch,
+          as: "Batch",
+          required: false
+        }
+      ]
     });
   }
 

@@ -79,7 +79,13 @@ class TraineeRepository {
           model: Registration,
           as: "registration",
           required: false
-        }
+        },
+        {
+          model: Batch,
+          as: "TraineeBatches",   
+          through: { attributes: [] },
+          required: false,
+        },
       ]
     })
   }

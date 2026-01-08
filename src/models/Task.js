@@ -42,7 +42,7 @@ const Task = sequelize.define("Task", {
   trainerId: {
     type: DataTypes.UUID,
     allowNull: false,
-    field: "trainee_id"
+    field: "trainer_id"
   },
 
   traineeId: {

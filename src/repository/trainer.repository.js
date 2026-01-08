@@ -1,19 +1,16 @@
-const { User, Batch, BatchTrainer } = require("../models");
+const { User, Batch, BatchTrainer, Task } = require("../models");
 
 class TrainerRepository {
 
   async assignBatches(trainerId, batchIds = []) {
-    // 1. Clear existing batches
     await BatchTrainer.destroy({
       where: { trainer_id: trainerId }
     });
 
-    // 2. If empty array → nothing more to do
     if (batchIds.length === 0) {
       return [];
     }
 
-    // 3. Insert new rows
     const rows = batchIds.map(batchId => ({
       trainer_id: trainerId,
       batch_id: batchId
@@ -31,7 +28,7 @@ class TrainerRepository {
 
   findAll() {
     return User.findAll({
-      where: { role: "trainer" },
+      where: { role: "trainer", softDelete: false },
       attributes: ["user_id", "name", "email"],
       include: [
         {
@@ -51,12 +48,20 @@ class TrainerRepository {
           model: User,
           as: "Trainers",
           where: { user_id: trainerId },
-          through: { attributes: [] }
+          through: { attributes: [] },
+          include: [
+            {
+              model: Task,
+              as: "AssignedTasks",
+              where: { softDelete: false },
+              required: false
+            }
+          ]
         },
         {
           model: User,
           as: "Trainees",
-          through: { attributes: [] }
+          through: { attributes: [] },
         },
       ]
     });

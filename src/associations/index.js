@@ -68,11 +68,11 @@ Task.belongsTo(Batch, {
    Trainer ↔ Task (Assigned By)
 ================================ */
 User.hasMany(Task, {
-  foreignKey: "assigned_by",
+  foreignKey: "trainer_id",
   as: "AssignedTasks"
 });
 Task.belongsTo(User, {
-  foreignKey: "assigned_by",
+  foreignKey: "trainer_id",
   as: "Trainer"
 });
 
