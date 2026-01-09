@@ -1,5 +1,5 @@
 const { User, Registration, BatchTrainee, Batch, Task } = require("../models");
-
+const UserRepository = require("./user.repository")
 class TraineeRepository {
 
   /* ---------- UPDATE USER STATUS ---------- */
@@ -14,6 +14,8 @@ class TraineeRepository {
 
   /* ---------- UPSERT REGISTRATION ---------- */
   async updateRegistrationByUserId(userId, data) {
+    const { name, email, phone } = data
+
     const registration = await Registration.findOne({
       where: { user_id: userId }
     });
@@ -22,6 +24,7 @@ class TraineeRepository {
       throw new Error("Registration not found for this user");
     }
 
+    await UserRepository.updateUser(userId, { name, email, phone })
     return registration.update(data);
   }
 
@@ -30,6 +33,7 @@ class TraineeRepository {
       where: { user_id: userId }
     });
   }
+
 
   /* ---------- ASSIGN BATCHES (MANUAL, SAFE) ---------- */
   async assignBatches(traineeId, batchIds = []) {
@@ -56,7 +60,7 @@ class TraineeRepository {
         role: "trainee",
         softDelete: false
       },
-      attributes: ["user_id", "name", "email", "status"],
+      attributes: ["user_id", "name", "email", "status", "phone"],
       include: [
         {
           model: Registration,
@@ -104,7 +108,15 @@ class TraineeRepository {
             {
               model: Task,
               as: "MyTasks",
-              where: { softDelete: false },
+              where: {
+                softDelete: false,
+                batch_id: batchId
+              },
+              required: false,
+            },
+            {
+              model: Registration,
+              as: "registration",
               required: false
             }
           ]

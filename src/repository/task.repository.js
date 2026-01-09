@@ -19,7 +19,7 @@ class TaskRepository {
           association: "Batch",
           attributes: ["id", "name"],
           where: { softDelete: false },
-          required: true
+          required: true   
         }
       ]
     });

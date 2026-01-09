@@ -13,6 +13,9 @@ class TraineeService {
   /* ---------- UPDATE TRAINEE DETAILS ---------- */
   async updateTrainee(userId, data) {
     const {
+      name,
+      email,
+      phone,
       batches = [],
       admissionStatus,
       education,
@@ -29,7 +32,7 @@ class TraineeService {
       remarks2,
       wantToBoard,
       joinedDate,
-      shift
+      shift,
     } = data;
 
     if (!Array.isArray(batches)) {
@@ -44,6 +47,9 @@ class TraineeService {
 
     /* ================= 2. UPDATE REGISTRATION ================= */
     await traineeRepo.updateRegistrationByUserId(userId, {
+      name,
+      email,
+      phone,
       education,
       semester,
       college,
@@ -59,7 +65,7 @@ class TraineeService {
       remarks2,
       wantToBoard,
       joinedDate,
-      shift
+      shift,
     });
 
     /* ================= 3. STATUS TRANSITIONS ================= */
@@ -131,11 +137,11 @@ class TraineeService {
   async getAllTrainees() {
     const users = await traineeRepo.findAll();
     const data = (users || []).map(u => ({
-
       user_id: u?.user_id ?? null,
       name: u?.name ?? null,
       email: u?.email ?? null,
       status: u?.status ?? null,
+      phone: u?.phone ?? null,
       joinedAt: u?.joinedAt ?? null,
       shift: u?.shift,
       registrationId: u?.registration?.id ?? null,

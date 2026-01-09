@@ -50,17 +50,19 @@ class TaskService {
     if (task.traineeId !== traineeId)
       throw new Error("Not authorized");
 
-    // Status transition rules
-    if (
-      (task.status === "ASSIGNED" && newStatus !== "IN_PROGRESS") ||
-      (task.status === "IN_PROGRESS" && newStatus !== "COMPLETED")
-    ) {
+    const allowedTransitions = {
+      ASSIGNED: ["IN_PROGRESS"],
+      IN_PROGRESS: ["ASSIGNED", "COMPLETED"], 
+      COMPLETED: ["IN_PROGRESS"],             
+    };
+
+    if (!allowedTransitions[task.status]?.includes(newStatus)) {
       throw new Error("Invalid status transition");
     }
 
     return taskRepository.update(task, {
       status: newStatus,
-      reviewComment: null
+      reviewComment: null,
     });
   }
 }
