@@ -16,7 +16,11 @@ const Registration = sequelize.define("Registration", {
   education: DataTypes.STRING,
   semester: DataTypes.STRING,
   college: DataTypes.STRING,
-  technology: {type: DataTypes.STRING, allowNull:true},
+  branch: {
+    type: DataTypes.ENUM("AHEMDABAD", "JUNAGADH"),
+    defaultValue: "AHEMDABAD"
+  },
+  technology: { type: DataTypes.STRING, allowNull: true },
   duration: DataTypes.STRING,
 
   totalFee: DataTypes.INTEGER,
