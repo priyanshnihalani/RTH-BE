@@ -50,7 +50,7 @@ class TrainerService {
         name: p.name,
         email: p.email,
         batchCount: batches.length,
-        batches: batches.map(b => b.name),
+        batches: batches.map(b => b.technology),
         batchIds: batches.map(b => b.id)
       };
     });

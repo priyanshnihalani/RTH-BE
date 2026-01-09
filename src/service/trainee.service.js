@@ -146,10 +146,9 @@ class TraineeService {
       shift: u?.shift,
       registrationId: u?.registration?.id ?? null,
       registration: u?.registration ?? null,
-      technology: u?.technology ?? null,
       batches: (u?.TraineeBatches || []).map(b => ({
         id: b?.id ?? null,
-        name: b?.name ?? null
+        name: b?.technology ?? null
       })),
       wantToBoard: u?.wantToBoard
     }));

@@ -38,8 +38,8 @@ class TaskService {
 
   /* ================= TRAINEE ================= */
 
-  async getMyTasks(traineeId) {
-    return taskRepository.findByTrainee(traineeId);
+  async getMyTasks(traineeId, batchId) {
+    return taskRepository.findByTrainee(traineeId, batchId);
   }
 
   async updateTaskStatus(taskId, traineeId, newStatus) {
@@ -47,7 +47,7 @@ class TaskService {
 
     if (!task) throw new Error("Task not found");
 
-    if (task.traineeId !== traineeId)
+    if (task.trainee_id !== traineeId)
       throw new Error("Not authorized");
 
     const allowedTransitions = {

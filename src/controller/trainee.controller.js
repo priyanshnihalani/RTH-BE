@@ -44,7 +44,7 @@ exports.updateTrainee = async (req, res) => {
     const traineeId = req.params.id;
     const data = req.body;
 
-    const resdata = await traineeService.updateTrainee(traineeId, data);
+    await traineeService.updateTrainee(traineeId, data);
     res.status(200).json({
       success: true,
       message: "Trainee updated successfully"

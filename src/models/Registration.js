@@ -16,7 +16,7 @@ const Registration = sequelize.define("Registration", {
   education: DataTypes.STRING,
   semester: DataTypes.STRING,
   college: DataTypes.STRING,
-  technology: DataTypes.STRING,
+  technology: {type: DataTypes.STRING, allowNull:true},
   duration: DataTypes.STRING,
 
   totalFee: DataTypes.INTEGER,

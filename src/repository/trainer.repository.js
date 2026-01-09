@@ -33,10 +33,11 @@ class TrainerRepository {
       include: [
         {
           association: "TrainerBatches",
-          attributes: ["id", "name"],
+          attributes: ["id", "technology"], 
           where: { softDelete: false },
           through: { attributes: [] },
-          required: false
+          required: false,
+          duplicating: false
         }
       ]
     });
@@ -57,7 +58,7 @@ class TrainerRepository {
         },
         {
           model: Task,
-          as: "Tasks", // 👈 Batch.hasMany(Task, as: "Tasks")
+          as: "Tasks", 
           where: {
             softDelete: false
           },

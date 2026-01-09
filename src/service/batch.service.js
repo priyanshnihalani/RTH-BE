@@ -10,19 +10,7 @@ class BatchService {
   /* ---------- GET ALL ---------- */
   async getAllBatches() {
     const batches = await batchRepository.findAllWithDetails();
-
-    return batches.map(b => {
-      const plain = b.get({ plain: true });
-      return {
-        id: plain.id,
-        name: plain.name,
-        technology: plain.technology,
-        startDate: plain.startDate,
-        endDate: plain.endDate,
-        traineeCount: Number(plain?.Trainees?.length || 0),
-        trainerName: plain.Trainers?.[0]?.name || "Not Assigned"
-      };
-    });
+    return batches
   }
 
   /* ---------- GET ONE ---------- */

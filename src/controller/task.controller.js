@@ -45,7 +45,8 @@ exports.sendBackForRework = async (req, res) => {
 
 exports.getMyTasks = async (req, res) => {
   try {
-    const tasks = await taskService.getMyTasks(req.body.traineeId);
+    
+    const tasks = await taskService.getMyTasks(req.body.traineeId, req.body.batchId);
     res.json(tasks);
   } catch (err) {
     res.status(400).json({ message: err.message });

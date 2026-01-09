@@ -14,15 +14,12 @@ class BatchRepository {
       where: { softDelete: false },
       attributes: [
         "id",
-        "name",
         "technology",
-        "startDate",
-        "endDate",
         [
           Sequelize.literal(`(
           SELECT COUNT(*)
-          FROM "BatchTrainees"
-          WHERE "BatchTrainees"."batch_id" = "Batch"."id"
+          FROM "batch_trainees"
+          WHERE "batch_trainees"."batch_id" = "Batch"."id"
         )`),
           "traineeCount"
         ]

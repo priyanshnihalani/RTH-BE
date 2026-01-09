@@ -55,23 +55,14 @@ class TraineeRepository {
 
   /* ---------- FETCH ALL ---------- */
   async findAll() {
-    return await User.findAll({
+    return User.findAll({
       where: {
         role: "trainee",
         softDelete: false
       },
-      attributes: ["user_id", "name", "email", "status", "phone"],
       include: [
-        {
-          model: Registration,
-          as: "registration"
-        },
-        {
-          association: "TraineeBatches",
-          attributes: ["id", "name"],
-          through: { attributes: [] },
-          required: false
-        }
+        { model: Registration, as: "registration", required: false },
+        { association: "TraineeBatches", where: { softDelete: false }, required: false }
       ]
     });
   }
@@ -95,8 +86,8 @@ class TraineeRepository {
     })
   }
 
-  async getBatchTrainees(batchId) {
-    return Batch.findByPk(batchId, {
+  async getBatchTrainees(batch_id) {
+    return Batch.findByPk( batch_id , {
       include: [
         {
           model: User,
@@ -110,7 +101,7 @@ class TraineeRepository {
               as: "MyTasks",
               where: {
                 softDelete: false,
-                batch_id: batchId
+                batch_id
               },
               required: false,
             },

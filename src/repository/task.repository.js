@@ -11,26 +11,18 @@ class TaskRepository {
     return Task.findByPk(id);
   }
 
-  findByTrainee(traineeId) {
-    return Task.findAll({
-      where: { traineeId },
-      include: [
-        {
-          association: "Batch",
-          attributes: ["id", "name"],
-          where: { softDelete: false },
-          required: true   
-        }
-      ]
+  async findByTrainee(traineeId, batchId) {
+    return await Task.findAll({
+      where: { trainee_id: traineeId, batch_id: batchId }
     });
   }
 
   async getTraineeTasks(trainerId, traineeId, batchId) {
     return Task.findAll({
       where: {
-        trainerId,
-        traineeId,
-        batchId
+        trainer_id: trainerId,
+        trainee_id: traineeId,
+        batch_id: batchId
       },
       include: [
         {
@@ -45,7 +37,7 @@ class TaskRepository {
 
   findByBatch(batchId) {
     return Task.findAll({
-      where: { batchId }
+      where: { batch_id: batchId }
     });
   }
 

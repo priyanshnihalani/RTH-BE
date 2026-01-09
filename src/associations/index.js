@@ -25,15 +25,20 @@ Batch.belongsToMany(User, {
   through: BatchTrainer,
   as: "Trainers",
   foreignKey: "batch_id",
-  otherKey: "trainer_id"
+  otherKey: "trainer_id",
+  targetKey: "user_id",
+  constraints: false   
 });
 
 User.belongsToMany(Batch, {
   through: BatchTrainer,
   as: "TrainerBatches",
   foreignKey: "trainer_id",
-  otherKey: "batch_id"
+  otherKey: "batch_id",
+  sourceKey: "user_id",
+  constraints: false   
 });
+
 
 /* ===============================
    Batch ↔ Trainee (Many-to-Many)
@@ -42,15 +47,20 @@ Batch.belongsToMany(User, {
   through: BatchTrainee,
   as: "Trainees",
   foreignKey: "batch_id",
-  otherKey: "trainee_id"
+  otherKey: "trainee_id",
+  targetKey: "user_id",
+  constraints: false   
 });
 
 User.belongsToMany(Batch, {
   through: BatchTrainee,
   as: "TraineeBatches",
   foreignKey: "trainee_id",
-  otherKey: "batch_id"
+  otherKey: "batch_id",
+  sourceKey: "user_id",
+  constraints: false   
 });
+
 
 /* ===============================
    Batch ↔ Task (1:N)
@@ -80,12 +90,12 @@ Task.belongsTo(User, {
    Trainee ↔ Task (Assigned To)
 ================================ */
 User.hasMany(Task, {
-  foreignKey: "traineeId",  
+  foreignKey: "trainee_id",
   as: "MyTasks"
 });
 
 Task.belongsTo(User, {
-  foreignKey: "traineeId",   
+  foreignKey: "trainee_id",
   as: "Trainee"
 });
 
