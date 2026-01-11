@@ -21,6 +21,7 @@ app.use("/api/task", require("./src/routes/task.route"));
 app.use("/api/generateOfferLetter", require("./src/routes/offer.route"));
 app.use("/api/preboard", require("./src/routes/preboardProgress.route"));
 app.use("/api/predoc", require("./src/routes/predocProgress.route"));
+app.use("/api/messages", require("./src/routes/taskmessage.route"));
 
 app.use("/public", express.static("public"));
 

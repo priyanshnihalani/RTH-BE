@@ -1,6 +1,7 @@
 const { Batch } = require("../models");
 const Task = require("../models/Task");
-
+const { fn, col } = require("sequelize");
+const TaskMessage = require('../models/TaskMessage')
 class TaskRepository {
 
   create(data) {
@@ -35,25 +36,37 @@ class TaskRepository {
         trainee_id: traineeId,
         batch_id: batchId
       },
+      attributes: {
+        include: [
+          [fn("COUNT", col("TaskMessages.id")), "messageCount"]
+        ]
+      },
       include: [
         {
           model: Batch,
           as: "Batch",
           where: { softDelete: false },
           required: false
+        },
+        {
+          model: TaskMessage,
+          attributes: [],
+          required: false
         }
-      ]
+      ],
+      group: ["Task.id", "Batch.id"],
+      order: [["createdAt", "DESC"]]
     });
   }
 
-  findByBatch(batchId) {
-    return Task.findAll({
+  async findByBatch(batchId) {
+    return await Task.findAll({
       where: { batch_id: batchId }
     });
   }
 
-  update(task, data) {
-    return task.update(data);
+  async update(task, data) {
+    return await task.update(data);
   }
 }
 

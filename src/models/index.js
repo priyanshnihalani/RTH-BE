@@ -5,6 +5,7 @@ const BatchTrainer = require("./BatchTrainer")
 const BatchTrainee = require("./BatchTrainee")
 const Batch = require("./Batch")
 const Task = require("./Task")
+const TaskMessage = require("./Task")
 
 module.exports = {
   User,
@@ -13,5 +14,6 @@ module.exports = {
   BatchTrainee,
   BatchTrainer,
   Note,
-  Task
+  Task,
+  TaskMessage
 };

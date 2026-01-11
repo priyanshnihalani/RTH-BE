@@ -5,6 +5,7 @@ const BatchTrainer = require("../models/BatchTrainer");
 const BatchTrainee = require("../models/BatchTrainee");
 const Task = require("../models/Task");
 const TrainerNote = require("../models/Note");
+const TaskMessage = require("../models/TaskMessage")
 
 /* ===============================
    User ↔ Registration (1:1)
@@ -27,7 +28,7 @@ Batch.belongsToMany(User, {
   foreignKey: "batch_id",
   otherKey: "trainer_id",
   targetKey: "user_id",
-  constraints: false   
+  constraints: false
 });
 
 User.belongsToMany(Batch, {
@@ -36,7 +37,7 @@ User.belongsToMany(Batch, {
   foreignKey: "trainer_id",
   otherKey: "batch_id",
   sourceKey: "user_id",
-  constraints: false   
+  constraints: false
 });
 
 
@@ -49,7 +50,7 @@ Batch.belongsToMany(User, {
   foreignKey: "batch_id",
   otherKey: "trainee_id",
   targetKey: "user_id",
-  constraints: false   
+  constraints: false
 });
 
 User.belongsToMany(Batch, {
@@ -58,7 +59,7 @@ User.belongsToMany(Batch, {
   foreignKey: "trainee_id",
   otherKey: "batch_id",
   sourceKey: "user_id",
-  constraints: false   
+  constraints: false
 });
 
 
@@ -112,6 +113,15 @@ TrainerNote.belongsTo(User, {
   as: "Trainer"
 });
 
+
+Task.hasMany(TaskMessage, {
+  foreignKey: "taskId"
+});
+
+TaskMessage.belongsTo(Task, {
+  foreignKey: "taskId"
+});
+
 module.exports = {
   User,
   Registration,
@@ -119,5 +129,6 @@ module.exports = {
   BatchTrainer,
   BatchTrainee,
   Task,
-  TrainerNote
+  TrainerNote,
+  TaskMessage
 };
