@@ -3,7 +3,6 @@ const repo = require("../repository/predocProgress.repository");
 class PreDocProgressService {
 
   async upsertProgress({ user_id, module_id, status }) {
-
     const validStatuses = ["NOT_STARTED", "IN_PROGRESS", "COMPLETED"];
 
     if (!validStatuses.includes(status)) {

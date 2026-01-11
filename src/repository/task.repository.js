@@ -7,14 +7,25 @@ class TaskRepository {
     return Task.create(data);
   }
 
-  findById(id) {
-    return Task.findByPk(id);
+  async findById(id) {
+    return await Task.findByPk(id);
   }
 
   async findByTrainee(traineeId, batchId) {
     return await Task.findAll({
       where: { trainee_id: traineeId, batch_id: batchId }
     });
+  }
+  async updateTaskDescriptionTitle(task) {
+    return await Task.update(
+      {
+        title: task.title,
+        description: task.description,
+      },
+      {
+        where: { id: task.taskId },
+      }
+    );
   }
 
   async getTraineeTasks(trainerId, traineeId, batchId) {

@@ -38,25 +38,39 @@ class TaskService {
 
   /* ================= TRAINEE ================= */
 
-  async getMyTasks(traineeId, batchId) {
-    return taskRepository.findByTrainee(traineeId, batchId);
+  async updateTaskDescriptionTitle(task) {
+    return await taskRepository.updateTaskDescriptionTitle(task)
   }
 
-  async updateTaskStatus(taskId, traineeId, newStatus) {
+  async getMyTasks(traineeId, batchId) {
+    return await taskRepository.findByTrainee(traineeId, batchId);
+  }
+
+  async updateTaskStatus(taskId, traineeId, newStatus, isTrainerView = false) {
     const task = await taskRepository.findById(taskId);
 
     if (!task) throw new Error("Task not found");
 
-    if (task.trainee_id !== traineeId)
+    if (!isTrainerView && task.trainee_id !== traineeId)
       throw new Error("Not authorized");
 
-    const allowedTransitions = {
+    // Forward-only (for trainee)
+    const forwardOnly = {
       ASSIGNED: ["IN_PROGRESS"],
-      IN_PROGRESS: ["ASSIGNED", "COMPLETED"], 
-      COMPLETED: ["IN_PROGRESS"],             
+      IN_PROGRESS: ["COMPLETED"],
+      COMPLETED: [],
     };
 
-    if (!allowedTransitions[task.status]?.includes(newStatus)) {
+    // Forward + backward (for trainer)
+    const bidirectional = {
+      ASSIGNED: ["IN_PROGRESS"],
+      IN_PROGRESS: ["ASSIGNED", "COMPLETED"],
+      COMPLETED: ["IN_PROGRESS"],
+    };
+
+    const rules = isTrainerView ? bidirectional : forwardOnly;
+
+    if (!rules[task.status]?.includes(newStatus)) {
       throw new Error("Invalid status transition");
     }
 
@@ -65,6 +79,7 @@ class TaskService {
       reviewComment: null,
     });
   }
+
 }
 
 module.exports = new TaskService();

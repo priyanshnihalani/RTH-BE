@@ -43,9 +43,18 @@ exports.sendBackForRework = async (req, res) => {
 
 /* ================= TRAINEE ================= */
 
+exports.updateTaskDescriptionTitle = async (req, res) => {
+  try {
+    await taskService.updateTaskDescriptionTitle(req.body)
+    res.status(200).json({ message: "Task Updated Successfully" })
+  }
+  catch (err) {
+    res.status(400).json({ message: err.message });
+  }
+}
+
 exports.getMyTasks = async (req, res) => {
   try {
-    
     const tasks = await taskService.getMyTasks(req.body.traineeId, req.body.batchId);
     res.json(tasks);
   } catch (err) {
@@ -55,8 +64,8 @@ exports.getMyTasks = async (req, res) => {
 
 exports.updateTaskStatus = async (req, res) => {
   try {
-    const {newStatus, taskId, traineeId} = req.body
-    const task = await taskService.updateTaskStatus(taskId, traineeId, newStatus);
+    const { newStatus, taskId, traineeId, isTrainerView = false } = req.body
+    const task = await taskService.updateTaskStatus(taskId, traineeId, newStatus, isTrainerView);
     res.json(task);
   } catch (err) {
     res.status(400).json({ message: err.message });

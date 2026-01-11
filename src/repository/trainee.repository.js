@@ -87,7 +87,7 @@ class TraineeRepository {
   }
 
   async getBatchTrainees(batch_id) {
-    return Batch.findByPk( batch_id , {
+    return await Batch.findByPk( batch_id , {
       include: [
         {
           model: User,
