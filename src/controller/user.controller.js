@@ -80,7 +80,6 @@ exports.checkStatus = async (req, res) => {
       process.env.JWT_WAITING_SECRET
     );
 
-    console.log(decoded)
     const result =
       await userService.checkWaitingStatus(decoded.id);
 
@@ -97,7 +96,6 @@ exports.checkStatus = async (req, res) => {
     }
 
     /* ---------- STILL WAITING ---------- */
-    console.log(result)
     return res.status(200).json({
       type: "waiting",
       status: result.status,

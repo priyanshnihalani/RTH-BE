@@ -84,7 +84,6 @@ class UserService {
 
   /* ---------- CHECK WAITING STATUS ---------- */
   async checkWaitingStatus(userId) {
-    console.log(userId)
     const userModel = await userRepository.findById(userId);
     if (!userModel) throw new Error("User not found");
 
