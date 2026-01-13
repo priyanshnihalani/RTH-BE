@@ -15,6 +15,7 @@ class BatchRepository {
       attributes: [
         "id",
         "technology",
+        "prices",
         [
           Sequelize.literal(`(
           SELECT COUNT(*)

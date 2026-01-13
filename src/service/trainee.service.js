@@ -24,7 +24,8 @@ class TraineeService {
       technology,
       duration,
       totalFee,
-      remainingFee,
+      paidFees,
+      feesToPay,
       trainingStatus,
       certificateIssued,
       ndaSigned,
@@ -56,7 +57,8 @@ class TraineeService {
       technology,
       duration,
       totalFee,
-      remainingFee,
+      paidFees,
+      feesToPay,
       admissionStatus,
       trainingStatus,
       certificateIssued,
@@ -136,24 +138,50 @@ class TraineeService {
   /* ---------- GET ALL ---------- */
   async getAllTrainees() {
     const users = await traineeRepo.findAll();
-    const data = (users || []).map(u => ({
-      user_id: u?.user_id ?? null,
-      name: u?.name ?? null,
-      email: u?.email ?? null,
-      status: u?.status ?? null,
-      phone: u?.phone ?? null,
-      joinedAt: u?.joinedAt ?? null,
-      shift: u?.shift,
-      registrationId: u?.registration?.id ?? null,
-      registration: u?.registration ?? null,
-      batches: (u?.TraineeBatches || []).map(b => ({
-        id: b?.id ?? null,
-        name: b?.technology ?? null
-      })),
-      wantToBoard: u?.wantToBoard
-    }));
+    const today = new Date();
 
-    return data
+    const data = (users || []).map(u => {
+      const notification = {};
+
+      if (u?.registration?.endDate) {
+        const endDate = new Date(u.registration.endDate);
+        const diffMs = endDate - today;
+        const daysLeft = Math.ceil(diffMs / (1000 * 60 * 60 * 24));
+
+        if (daysLeft <= 7 && daysLeft >= 0) {
+          notification.finish = `${daysLeft} days remaining`;
+        }
+      }
+
+      if (u?.registration?.createdAt) {
+
+        const createdAt = new Date(u.registration.createdAt);
+        const diffMs = today - createdAt;
+        const daysPassed = Math.floor(diffMs / (1000 * 60 * 60 * 24));
+        if (daysPassed >= 7 && u?.registration?.paidFees == 0) {
+          notification.feesReminder = `Ask ${u?.name} To Pay Fees`;
+        }
+      }
+      return {
+        notification: Object.keys(notification).length ? notification : null,
+        user_id: u?.user_id ?? null,
+        name: u?.name ?? null,
+        email: u?.email ?? null,
+        status: u?.status ?? null,
+        phone: u?.phone ?? null,
+        joinedAt: u?.joinedAt ?? null,
+        shift: u?.shift,
+        registrationId: u?.registration?.id ?? null,
+        registration: u?.registration ?? null,
+        batches: (u?.TraineeBatches || []).map(b => ({
+          id: b?.id ?? null,
+          name: b?.technology ?? null
+        })),
+        wantToBoard: u?.wantToBoard
+      };
+    });
+
+    return data;
   }
 
   async getBatchTrainees(batchId) {

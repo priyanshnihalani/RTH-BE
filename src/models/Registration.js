@@ -24,8 +24,8 @@ const Registration = sequelize.define("Registration", {
   duration: DataTypes.STRING,
 
   totalFee: DataTypes.INTEGER,
-  remainingFee: DataTypes.INTEGER,
-
+  feesToPay: DataTypes.INTEGER,
+  paidFees: { type: DataTypes.INTEGER, defaultValue: 0 },
   inquiryDate: DataTypes.DATEONLY,
 
   admissionStatus: {
@@ -63,7 +63,8 @@ const Registration = sequelize.define("Registration", {
     defaultValue: true
   },
 
-  joinedDate: DataTypes.DATEONLY,
+  joinedDate: { type: DataTypes.DATEONLY, allowNull: true },
+  endDate: { type: DataTypes.DATEONLY, allowNull: true },
 
   remarks1: DataTypes.TEXT,
   remarks2: DataTypes.TEXT
