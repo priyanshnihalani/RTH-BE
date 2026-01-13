@@ -13,7 +13,7 @@ exports.generateOfferLetter = async (req, res) => {
 
   res.set({
     "Content-Type": "application/pdf",
-    "Content-Disposition": "attachment; filename=Offer_Letter.pdf"
+    "Content-Disposition": `attachment; filename=${req.body.name}.pdf`
   });
 
   res.send(pdf);
@@ -51,7 +51,7 @@ exports.generateCertificate = async (req, res) => {
   const pdf = await generatePDF(html)
   res.set({
     "Content-Type": "application/pdf",
-    "Content-Disposition": "attachment; filename=Certificate.pdf"
+    "Content-Disposition": `attachment; filename=${req.body.name}.pdf`
   });
 
   res.send(pdf);
