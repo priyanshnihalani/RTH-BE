@@ -49,7 +49,7 @@ class UserService {
       { id: user.user_id, type: "waiting" },
       `${process.env.JWT_WAITING_SECRET}`,
 
-      { expiresIn: `${process.env.JWT_WAITING_EXPIRES}h` }
+      { expiresIn: `${process.env.JWT_WAITING_EXPIRES}d` }
     );
 
     return { waitingToken };
@@ -84,6 +84,7 @@ class UserService {
 
   /* ---------- CHECK WAITING STATUS ---------- */
   async checkWaitingStatus(userId) {
+    console.log(userId)
     const userModel = await userRepository.findById(userId);
     if (!userModel) throw new Error("User not found");
 
