@@ -2,6 +2,8 @@ const ejs = require("ejs");
 const path = require("path");
 const generatePDF = require("../utils/generatePdf");
 const { formatReadableDate } = require("../utils/formatReadableData");
+const traineeService = require("../service/trainee.service");
+const paymentlogService = require("../service/paymentlog.service");
 
 exports.generateOfferLetter = async (req, res) => {
   const data = req.body;
@@ -24,12 +26,11 @@ exports.generateReceipt = async (req, res) => {
   const receiptNo = "RTH-" + Date.now();
   const date = new Date().toLocaleString();
 
-
   const html = await ejs.renderFile(
     path.join(__dirname, "../../templates/receipt.ejs"),
     { ...data, receiptNo, date }
   );
-
+  
   const pdf = await generatePDF(html);
 
   res.set({

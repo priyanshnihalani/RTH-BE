@@ -1,5 +1,8 @@
+const { fn, col, where, Op, literal, } = require("sequelize");
+const sequelize = require("../../config/db")
 const { User, Registration, BatchTrainee, Batch, Task } = require("../models");
-const UserRepository = require("./user.repository")
+const UserRepository = require("./user.repository");
+const PaymentLog = require("../models/PaymentLog");
 class TraineeRepository {
 
   /* ---------- UPDATE USER STATUS ---------- */
@@ -37,20 +40,32 @@ class TraineeRepository {
 
   /* ---------- ASSIGN BATCHES (MANUAL, SAFE) ---------- */
   async assignBatches(traineeId, batchIds = []) {
-    await BatchTrainee.destroy({
-      where: { trainee_id: traineeId }
+    if (!Array.isArray(batchIds) || batchIds.length === 0) return [];
+
+    const normalized = batchIds
+      .map(b => (typeof b === "object" ? Number(b.id) : Number(b)))
+      .filter(Boolean);
+
+    if (!normalized.length) return [];
+
+    const currentSelected = normalized.at(-1);
+
+    const existing = await BatchTrainee.findOne({
+      where: {
+        trainee_id: traineeId,
+        batch_id: currentSelected,
+      },
     });
 
-    if (batchIds.length === 0) {
-      return [];
+    if (existing) {
+      await existing.update({ joinedAt: new Date() });
+      return existing;
     }
 
-    const rows = batchIds.map(batchId => ({
+    return BatchTrainee.create({
       trainee_id: traineeId,
-      batch_id: batchId
-    }));
-
-    return BatchTrainee.bulkCreate(rows);
+      batch_id: currentSelected,
+    });
   }
 
   /* ---------- FETCH ALL ---------- */
@@ -58,13 +73,132 @@ class TraineeRepository {
     return User.findAll({
       where: {
         role: "trainee",
-        softDelete: false
+        softDelete: false,
       },
       include: [
-        { model: Registration, as: "registration", required: false },
-        { association: "TraineeBatches", where: { softDelete: false }, required: false }
+        {
+          model: Registration,
+          as: "registration",
+          required: false,
+        },
+        {
+          model: BatchTrainee,
+          as: "TraineeLinks",
+          required: false,
+          include: [
+            {
+              model: PaymentLog,
+              as: "PaymentLogs",
+            },
+            {
+              model: Batch,
+              as: "batch",
+            }
+          ],
+        },
+      ],
+      order: [
+        [
+          { model: BatchTrainee, as: "TraineeLinks" },
+          "joinedAt",
+          "ASC",
+        ],
+      ],
+    });
+  }
+
+  async findAllBatchSpecific() {
+    return BatchTrainee.findAll({
+      include: [
+        {
+          model: User,
+          as: "trainee",
+          where: {
+            role: "trainee",
+            softDelete: false
+          },
+          include: [
+            { model: Registration, as: "registration", required: false }
+          ]
+        },
+        {
+          model: Batch,
+          as: "batch"
+        }
       ]
     });
+
+  }
+  async BatchTraineeId({ trainee_id, batch_id }) {
+    return BatchTrainee.findOne({ where: { trainee_id, batch_id } })
+  }
+
+  async findAllTraineeByMonths(year) {
+    const [data] = await sequelize.query(`
+    SELECT
+      EXTRACT(YEAR FROM u."createdAt") AS year,
+      EXTRACT(MONTH FROM u."createdAt") AS month,
+      COUNT(DISTINCT u.user_id) AS "totalTrainees"
+    FROM "Users" u
+    WHERE
+      u.role = 'trainee'
+      AND u."softDelete" = false
+      AND EXTRACT(YEAR FROM u."createdAt") = :year
+    GROUP BY
+      EXTRACT(YEAR FROM u."createdAt"),
+      EXTRACT(MONTH FROM u."createdAt")
+    ORDER BY
+      month ASC
+  `, {
+      replacements: { year }
+    });
+
+    return data;
+  }
+
+  async findTraineeCountByCollege(year) {
+    const [data] = await sequelize.query(`
+    SELECT
+      r.college AS college,
+      COUNT(DISTINCT u.user_id) AS "totalTrainees"
+    FROM "Users" u
+    INNER JOIN "Registrations" r ON r.user_id = u.user_id
+    WHERE
+      u.role = 'trainee'
+      AND u."softDelete" = false
+      AND EXTRACT(YEAR FROM u."createdAt") = :year
+    GROUP BY
+      r.college
+    ORDER BY
+      "totalTrainees" DESC
+  `, {
+      replacements: { year }
+    });
+
+    return data;
+  }
+
+  async findTraineeCountByTechnology(year) {
+    const [data] = await sequelize.query(`
+    SELECT
+      b.technology AS technology,
+      COUNT(DISTINCT u.user_id) AS "totalTrainees"
+    FROM "Users" u
+    INNER JOIN batch_trainees bt ON bt.trainee_id = u.user_id
+    INNER JOIN "Batches" b ON b.id = bt.batch_id
+    WHERE
+      u.role = 'trainee'
+      AND u."softDelete" = false
+      AND EXTRACT(YEAR FROM u."createdAt") = :year
+    GROUP BY
+      b.technology
+    ORDER BY
+      "totalTrainees" DESC
+  `, {
+      replacements: { year }
+    });
+
+    return data;
   }
 
   async findUserById(id) {
@@ -73,7 +207,7 @@ class TraineeRepository {
         {
           model: Registration,
           as: "registration",
-          required: false
+          required: false,
         },
         {
           model: Batch,
@@ -82,12 +216,20 @@ class TraineeRepository {
           through: { attributes: [] },
           required: false,
         },
-      ]
-    })
+      ],
+      order: [
+        [
+          { model: Batch, as: "TraineeBatches" },
+          BatchTrainee,
+          "joinedAt",
+          "ASC",
+        ],
+      ],
+    });
   }
 
   async getBatchTrainees(batch_id) {
-    return await Batch.findByPk( batch_id , {
+    return await Batch.findByPk(batch_id, {
       include: [
         {
           model: User,

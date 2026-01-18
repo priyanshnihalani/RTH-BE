@@ -131,6 +131,47 @@
             height: 80%;
             object-fit: contain;
         }
+
+        .certificate-id {
+            position: absolute;
+            bottom: 40px;
+            left: 0;
+            right: 0;
+            text-align: center;
+            font-size: 12px;
+            color: #444;
+            letter-spacing: 0.6px;
+        }
+
+        .certificate-id a {
+            color: blue;
+            text-decoration: underline;
+            text-decoration: none;
+        }
+
+        .certificate span{
+            font-weight: bold;
+        }
+
+        .certificate-id a:hover {
+            text-decoration: underline;
+        }
+
+        .website {
+            position: absolute;
+            bottom: 18px;
+            left: 0;
+            right: 0;
+            text-align: center;
+            font-size: 12px;
+            color: #666;
+            letter-spacing: 1px;
+        }
+
+        .website a {
+            text-decoration: none;
+            color: inherit;
+        }
     </style>
 </head>
 
@@ -181,6 +222,15 @@
             </div>
         </div>
 
+        <!-- CERTIFICATE VERIFY LINK -->
+        <div class="certificate-id">
+            Verify this certificate at:
+            <span>
+                techroversolutions.com/certificate/<a href="https://techroversolutions.com/certificate/<%= certificateId %>" target="_blank" style="text-decoration: underline;">
+                    <%= certificateId %>
+                </a>
+            </span>
+        </div>
     </div>
 
 </body>

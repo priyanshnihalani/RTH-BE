@@ -15,6 +15,8 @@ class TraineeService {
     const {
       name,
       email,
+      configuration,
+      system,
       phone,
       batches = [],
       admissionStatus,
@@ -33,6 +35,7 @@ class TraineeService {
       remarks2,
       wantToBoard,
       joinedDate,
+      branch,
       shift,
     } = data;
 
@@ -50,6 +53,8 @@ class TraineeService {
     await traineeRepo.updateRegistrationByUserId(userId, {
       name,
       email,
+      configuration,
+      system,
       phone,
       education,
       semester,
@@ -63,6 +68,7 @@ class TraineeService {
       trainingStatus,
       certificateIssued,
       ndaSigned,
+      branch,
       adharSubmitted,
       remarks2,
       wantToBoard,
@@ -110,6 +116,21 @@ class TraineeService {
     return true;
   }
 
+  async findAllTraineeByMonth(year) {
+    const users = await traineeRepo.findAllTraineeByMonths(year)
+    return users;
+  }
+
+  async findTraineeCountByCollage(year) {
+    const users = await traineeRepo.findTraineeCountByCollege(year)
+    return users;
+  }
+
+  async findTraineeCountByTechnology(year) {
+    const user = await traineeRepo.findTraineeCountByTechnology(year)
+    return user;
+  }
+
   /* ---------- APPROVE / ACTIVATE ---------- */
   async updateStatus(id, status) {
     const user = await userRepo.findById(id);
@@ -139,10 +160,8 @@ class TraineeService {
   async getAllTrainees() {
     const users = await traineeRepo.findAll();
     const today = new Date();
-
     const data = (users || []).map(u => {
       const notification = {};
-
       if (u?.registration?.endDate) {
         const endDate = new Date(u.registration.endDate);
         const diffMs = endDate - today;
@@ -153,15 +172,21 @@ class TraineeService {
         }
       }
 
-      if (u?.registration?.createdAt) {
-
-        const createdAt = new Date(u.registration.createdAt);
-        const diffMs = today - createdAt;
+      if (u?.TraineeLinks?.length) {
+        const lastLink = u.TraineeLinks[u.TraineeLinks.length - 1];
+        const joinedAt = new Date(lastLink.joinedAt);
+        const diffMs = today - joinedAt;
         const daysPassed = Math.floor(diffMs / (1000 * 60 * 60 * 24));
-        if (daysPassed >= 7 && u?.registration?.paidFees == 0) {
-          notification.feesReminder = `Ask ${u?.name} To Pay Fees`;
+
+        const logs = lastLink?.PaymentLogs || [];
+        const totalPaid = logs.reduce((s, p) => s + Number(p.amount || 0), 0);
+
+        if (daysPassed >= 7 && totalPaid === 0) {
+          const batchName = lastLink?.batch?.technology || "current batch";
+          notification.feesReminder = `Ask ${u?.name} To Pay Fees for ${batchName}`;
         }
       }
+
       return {
         notification: Object.keys(notification).length ? notification : null,
         user_id: u?.user_id ?? null,
@@ -173,15 +198,24 @@ class TraineeService {
         shift: u?.shift,
         registrationId: u?.registration?.id ?? null,
         registration: u?.registration ?? null,
-        batches: (u?.TraineeBatches || []).map(b => ({
-          id: b?.id ?? null,
-          name: b?.technology ?? null
+        batches: (u?.TraineeLinks || []).map(link => ({
+          id: link?.batch?.id ?? null,
+          name: link?.batch?.technology ?? null,
+          joinedAt: link?.joinedAt ?? null
         })),
         wantToBoard: u?.wantToBoard
       };
     });
 
     return data;
+  }
+
+  async getAllTraineesPerBatch() {
+    return traineeRepo.findAllBatchSpecific();
+  }
+
+  async batchTraineesId({ trainee_id, batch_id }) {
+    return traineeRepo.BatchTraineeId({ trainee_id, batch_id })
   }
 
   async getBatchTrainees(batchId) {

@@ -43,6 +43,16 @@ const Registration = sequelize.define("Registration", {
     defaultValue: false
   },
 
+  system: {
+    type: DataTypes.ENUM("PERSONAL", "DEPARTMENT"),
+    allowNull: true
+  },
+
+  configuration: {
+    type: DataTypes.STRING,
+    allowNull: true
+  },
+
   certificateIssued: {
     type: DataTypes.BOOLEAN,
     defaultValue: false

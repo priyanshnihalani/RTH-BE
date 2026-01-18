@@ -6,6 +6,7 @@ const BatchTrainee = require("../models/BatchTrainee");
 const Task = require("../models/Task");
 const TrainerNote = require("../models/Note");
 const TaskMessage = require("../models/TaskMessage")
+const PaymentLog = require("../models/PaymentLog")
 
 /* ===============================
    User ↔ Registration (1:1)
@@ -121,6 +122,49 @@ Task.hasMany(TaskMessage, {
 TaskMessage.belongsTo(Task, {
   foreignKey: "taskId"
 });
+
+/* ===============================
+   BatchTrainee ↔ PaymentLog (1:N)
+================================ */
+
+BatchTrainee.hasMany(PaymentLog, {
+  foreignKey: "batch_trainee_id",
+  as: "PaymentLogs"
+});
+
+PaymentLog.belongsTo(BatchTrainee, {
+  foreignKey: "batch_trainee_id",
+  as: "BatchTrainee"
+});
+
+/* ===============================
+   BatchTrainee ↔ User (Direct)
+================================ */
+BatchTrainee.belongsTo(User, {
+  as: "trainee",
+  foreignKey: "trainee_id",
+  targetKey: "user_id"
+});
+
+User.hasMany(BatchTrainee, {
+  as: "TraineeLinks",
+  foreignKey: "trainee_id",
+  sourceKey: "user_id"
+});
+
+/* ===============================
+   BatchTrainee ↔ Batch (Direct)
+================================ */
+BatchTrainee.belongsTo(Batch, {
+  as: "batch",
+  foreignKey: "batch_id"
+});
+
+Batch.hasMany(BatchTrainee, {
+  as: "BatchTraineeLinks",
+  foreignKey: "batch_id"
+});
+
 
 module.exports = {
   User,

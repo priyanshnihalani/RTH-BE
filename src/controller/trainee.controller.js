@@ -25,6 +25,22 @@ exports.getAll = async (req, res) => {
   res.json(data);
 };
 
+exports.getAllTraineesPerBatch = async (req, res) => {
+  try {
+    const data = await traineeService.getAllTraineesPerBatch();
+    return res.status(200).json({
+      success: true,
+      data
+    });
+  } catch (err) {
+    console.error("ERROR =>", err);
+    return res.status(500).json({
+      success: false,
+      message: err.message
+    });
+  }
+}
+
 exports.getBatchTrainees = async (req, res) => {
   try {
     const { batchId } = req.body;
@@ -49,6 +65,54 @@ exports.getBatchTrainees = async (req, res) => {
     });
   }
 };
+
+exports.findAllTraineeByMonth = async (req, res) => {
+  try {
+    const users = await traineeService.findAllTraineeByMonth(req.body.year)
+    res.status(200).json({
+      success: true,
+      users
+    });
+  }
+  catch (err) {
+    res.status(500).json({
+      success: false,
+      message: err.message
+    });
+  }
+}
+
+exports.findTraineeCountByCollage = async (req, res) => {
+  try {
+    const users = await traineeService.findTraineeCountByCollage(req.body.year)
+    res.status(200).json({
+      success: true,
+      users
+    });
+  }
+  catch (err) {
+    res.status(500).json({
+      success: false,
+      message: err.message
+    });
+  }
+}
+
+exports.findTraineeCountByTechnology = async (req, res) => {
+  try {
+    const users = await traineeService.findTraineeCountByTechnology(req.body.year)
+    res.status(200).json({
+      success: true,
+      users
+    });
+  }
+  catch (err) {
+    res.status(500).json({
+      success: false,
+      message: err.message
+    });
+  }
+}
 
 /* ---------- UPDATE STATUS ---------- */
 

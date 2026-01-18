@@ -2,9 +2,13 @@ const { DataTypes } = require("sequelize");
 const sequelize = require("../../config/db");
 
 const BatchTrainee = sequelize.define("BatchTrainee", {
+  id: {
+    type: DataTypes.INTEGER,
+    autoIncrement: true,
+    primaryKey: true,
+  },
   trainee_id: {
     type: DataTypes.UUID,
-    primaryKey: true
   },
   batch_id: {
     type: DataTypes.INTEGER,
