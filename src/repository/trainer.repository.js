@@ -62,13 +62,21 @@ class TrainerRepository {
           where: {
             softDelete: false
           },
-          required: false
+          required: false,
+          include: [
+            {
+              model: Task,
+              as: "AssignedTasks",
+              where: { softDelete: false },
+              required: false
+            }
+          ]
         },
         {
           model: User,
           as: "Trainees",
-          through: { attributes: [] }
-        }
+          through: { attributes: [] },
+        },
       ]
     });
   }
