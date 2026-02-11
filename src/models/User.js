@@ -9,12 +9,12 @@ const User = sequelize.define("User", {
   },
   name: {
     type: DataTypes.STRING,
-    allowNull: false
+    allowNull: true
   },
   email: {
     type: DataTypes.STRING,
     unique: true,
-    allowNull: false
+    allowNull: true
   },
   phone: {
     type: DataTypes.STRING,
@@ -22,14 +22,14 @@ const User = sequelize.define("User", {
   },
   password: {
     type: DataTypes.STRING,
-    allowNull: false
+    allowNull: true
   },
   role: {
     type: DataTypes.ENUM("admin", "trainer", "trainee"),
     allowNull: false
   },
   status: {
-    type: DataTypes.ENUM("approved", "pending", "blocked"),
+    type: DataTypes.ENUM("inquiry", "approved", "pending", "blocked"),
     defaultValue: "pending"
   },
   softDelete: {

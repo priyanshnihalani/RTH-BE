@@ -29,8 +29,13 @@ const Registration = sequelize.define("Registration", {
   inquiryDate: DataTypes.DATEONLY,
 
   admissionStatus: {
-    type: DataTypes.ENUM("pending", "approved", "rejected"),
+    type: DataTypes.ENUM("inquiry", "pending", "approved", "blocked"),
     defaultValue: "pending"
+  },
+
+  inquiryNotes: {
+    type: DataTypes.STRING,
+    allowNull: true
   },
 
   trainingStatus: {
@@ -71,6 +76,14 @@ const Registration = sequelize.define("Registration", {
   shift: {
     type: DataTypes.BOOLEAN,
     defaultValue: true
+  },
+
+  inquiryType: {
+    type: DataTypes.STRING,
+  },
+
+  reference: {
+    type: DataTypes.STRING,
   },
 
   joinedDate: { type: DataTypes.DATEONLY, allowNull: true },

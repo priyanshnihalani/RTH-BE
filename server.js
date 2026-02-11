@@ -24,7 +24,7 @@ app.use("/api/predoc", require("./src/routes/predocProgress.route"));
 app.use("/api/messages", require("./src/routes/taskmessage.route"));
 app.use("/api/payments", require("./src/routes/paymentlog.route"));
 app.use("/api/certificate", require("./src/routes/certificate.route"));
-
+app.use("/api/inquiry", require("./src/routes/inquiry.route"));
 app.use("/public", express.static("public"));
 
 (async () => {

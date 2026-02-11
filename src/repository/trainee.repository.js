@@ -73,6 +73,7 @@ class TraineeRepository {
     return User.findAll({
       where: {
         role: "trainee",
+        status: "approved",
         softDelete: false,
       },
       include: [
@@ -115,6 +116,7 @@ class TraineeRepository {
           as: "trainee",
           where: {
             role: "trainee",
+            status: "approved",
             softDelete: false
           },
           include: [
@@ -142,6 +144,7 @@ class TraineeRepository {
     FROM "Users" u
     WHERE
       u.role = 'trainee'
+      AND u.status = 'approved'   -- ✅ ADDED
       AND u."softDelete" = false
       AND EXTRACT(YEAR FROM u."createdAt") = :year
     GROUP BY
@@ -162,9 +165,11 @@ class TraineeRepository {
       r.college AS college,
       COUNT(DISTINCT u.user_id) AS "totalTrainees"
     FROM "Users" u
-    INNER JOIN "Registrations" r ON r.user_id = u.user_id
+    INNER JOIN "Registrations" r 
+      ON r.user_id = u.user_id
     WHERE
       u.role = 'trainee'
+      AND u.status = 'approved'   -- ✅ ADDED
       AND u."softDelete" = false
       AND EXTRACT(YEAR FROM u."createdAt") = :year
     GROUP BY
@@ -184,10 +189,13 @@ class TraineeRepository {
       b.technology AS technology,
       COUNT(DISTINCT u.user_id) AS "totalTrainees"
     FROM "Users" u
-    INNER JOIN batch_trainees bt ON bt.trainee_id = u.user_id
-    INNER JOIN "Batches" b ON b.id = bt.batch_id
+    INNER JOIN batch_trainees bt 
+      ON bt.trainee_id = u.user_id
+    INNER JOIN "Batches" b 
+      ON b.id = bt.batch_id
     WHERE
       u.role = 'trainee'
+      AND u.status = 'approved'   -- ✅ ADDED
       AND u."softDelete" = false
       AND EXTRACT(YEAR FROM u."createdAt") = :year
     GROUP BY
@@ -202,7 +210,13 @@ class TraineeRepository {
   }
 
   async findUserById(id) {
-    return await User.findByPk(id, {
+    return await User.findOne({
+      where: {
+        user_id: id,
+        role: "trainee",
+        status: "approved",
+        softDelete: false,
+      },
       include: [
         {
           model: Registration,
@@ -234,7 +248,7 @@ class TraineeRepository {
         {
           model: User,
           as: "Trainees",
-          where: { role: "trainee", softDelete: false },
+          where: { role: "trainee", status: "approved", softDelete: false },
           through: { attributes: [] },
           required: true,
           include: [

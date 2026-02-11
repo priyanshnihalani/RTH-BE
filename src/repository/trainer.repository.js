@@ -33,7 +33,7 @@ class TrainerRepository {
       include: [
         {
           association: "TrainerBatches",
-          attributes: ["id", "technology"], 
+          attributes: ["id", "technology"],
           where: { softDelete: false },
           through: { attributes: [] },
           required: false,
@@ -45,9 +45,8 @@ class TrainerRepository {
 
   async getTrainerBatches(trainerId) {
     return Batch.findAll({
-      where: {
-        softDelete: false
-      },
+      where: { softDelete: false },
+
       include: [
         {
           model: User,
@@ -56,27 +55,31 @@ class TrainerRepository {
           through: { attributes: [] },
           required: true
         },
+
         {
           model: Task,
-          as: "Tasks", 
-          where: {
-            softDelete: false
-          },
+          as: "Tasks",
+          where: { softDelete: false },
           required: false,
+
           include: [
             {
-              model: Task,
-              as: "AssignedTasks",
-              where: { softDelete: false },
-              required: false
+              model: User,
+              as: "Trainer", 
+              attributes: ["user_id", "name"]
+            },
+            {
+              model: User,
+              as: "Trainee", 
+              attributes: ["user_id", "name"]
             }
           ]
         },
         {
           model: User,
           as: "Trainees",
-          through: { attributes: [] },
-        },
+          through: { attributes: [] }
+        }
       ]
     });
   }
