@@ -73,15 +73,22 @@ class TraineeRepository {
     return User.findAll({
       where: {
         role: "trainee",
-        status: "approved",
         softDelete: false,
       },
+
       include: [
         {
           model: Registration,
           as: "registration",
           required: false,
+          where: {
+            inquiryDate: null,
+            admissionStatus: {
+              [Op.ne]: "blocked"
+            }
+          }
         },
+
         {
           model: BatchTrainee,
           as: "TraineeLinks",
@@ -98,6 +105,7 @@ class TraineeRepository {
           ],
         },
       ],
+
       order: [
         [
           { model: BatchTrainee, as: "TraineeLinks" },
@@ -107,6 +115,7 @@ class TraineeRepository {
       ],
     });
   }
+
 
   async findAllBatchSpecific() {
     return BatchTrainee.findAll({

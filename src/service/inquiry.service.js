@@ -44,7 +44,7 @@ class InquiryService {
     if (!allowed.includes(status)) {
       throw new Error("Invalid Status");
     }
-
+    
     await repo.updateStatus(user_id, status);
 
     return "Inquiry Status Updated";
@@ -77,6 +77,7 @@ class InquiryService {
     });
 
     await repo.updateRegistration(user_id, {
+      inquiryDate: null,
       admissionStatus: "approved"
     });
 

@@ -26,11 +26,11 @@ class InquiryRepository {
 
   async findAll() {
     return await Registration.findAll({
-      where: {
-        inquiryDate: {
-          [Op.not]: null
-        }
-      },
+      // where: {
+      //   inquiryDate: {
+      //     [Op.not]: null
+      //   }
+      // },
       include: [
         {
           model: User,
@@ -63,12 +63,11 @@ class InquiryRepository {
 
   async updateStatus(user_id, admissionStatus) {
     const t = await sequelize.transaction();
-
+    const inquiryDate =
+      ["approved", "blocked"].includes(admissionStatus)
+        ? null
+        : undefined;
     try {
-      await Registration.update(
-        { admissionStatus },
-        { where: { user_id }, transaction: t }
-      );
 
       const userStatusMap = {
         inquiry: "inquiry",
@@ -77,10 +76,14 @@ class InquiryRepository {
         rejected: "blocked"
       };
 
+      await Registration.update(
+        { admissionStatus, inquiryDate },
+        { where: { user_id }, transaction: t }
+      );
+
       await User.update(
         {
-          status:
-            userStatusMap[admissionStatus] || "pending"
+          status: admissionStatus
         },
         { where: { user_id }, transaction: t }
       );
